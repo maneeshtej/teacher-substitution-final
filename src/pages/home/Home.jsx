@@ -41,7 +41,7 @@ function Home() {
       {/*  */}
       {/* Header */}
       {/*  */}
-      <div className="h-[5vh] flex"></div>
+      <div className="h-[2vh] flex"></div>
       <div className="flex w-[100%] items-end px-[20px]">
         <div className="flex items-center gap-[15px] w-[100%]">
           <div className="min-h-[35px] min-w-[35px] bg-white rounded-[100px]"></div>
