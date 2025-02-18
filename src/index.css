@@ -2,4 +2,24 @@
 
 @theme {
   --font-open-sans: "Open Sans", serif;
+  --font-brush: "Grechen Fuemen", serif;
+  --font-cursive : "Dancing Script", serif;
+  --font-inter : "Inter", serif;
+
+  --color-backgroundc: rgb(0, 0, 0);
+  --color-textc: rgb(255, 255, 255);
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+      display: none;
+  }
+  .no-scrollbar {
+      -ms-overflow-style: none; 
+      scrollbar-width: none;  
+}
+}
+
+.mainwholnows {
+  color: rgb(255, 255, 255);
 }
