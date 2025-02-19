@@ -194,7 +194,7 @@ function AnimationsManager({ children }) {
       }}
     >
       <div
-        className="h-[100vh] w-[100%] bg-backgroundc text-textc"
+        className=" fixed h-[100vh] w-[100%] bg-backgroundc text-textc"
         style={{
           perspective: "1500px",
         }}
