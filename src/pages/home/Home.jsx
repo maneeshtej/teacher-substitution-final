@@ -113,7 +113,7 @@ function Home() {
       {/*  */}
       {/*  */}
       <div
-        className="fixed flex items-center justify-center bottom-0 md:border-r-[1px] border-[rgb(70,70,70)] lg:left-0 lg:w-[10vw] lg:h-[100vh] xl:w-[15vw] 
+        className="fixed flex items-center justify-center bottom-[10vh] md:bottom-0 md:border-r-[1px] border-[rgb(70,70,70)] lg:left-0 lg:w-[10vw] lg:h-[100vh] xl:w-[15vw] 
         h-[10vh] w-[100%] lg:bg-backgroundc bg-gradient-to-b from-transparent to-80% to-black"
       >
         <div className="flex items-center justify-between w-[60%] lg:flex-col lg:gap-[30px] xl:w-[100%]">
