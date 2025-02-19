@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useTheme } from "../../context/ThemeContext";
 import "./login.css";
 import {
   fetchUsers,
@@ -7,7 +6,7 @@ import {
   handleFetch,
 } from "../../../utils/fetchUtils";
 import { signIn, getUser, isUserLoggedIn } from "../../../utils/authUtils";
-import { useManeeshState } from "../../context/StateProvider";
+import useTeachStore from "../../context/useTeachStore";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
@@ -15,7 +14,8 @@ function Login() {
   const [password, setPassword] = useState(null);
   const [teacherData, setTeacherData] = useState({});
   const [loading, setLoading] = useState(false);
-  const { updateState, updatePersistState } = useManeeshState();
+  const { setteacherid, setteachername, setteacheremail, setteacherdetails } =
+    useTeachStore();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,7 +35,7 @@ function Login() {
   }, []);
 
   useEffect(() => {
-    console.log(username, password);
+    // console.log(username, password);
   }, [username, password]);
 
   const handleUsername = (e) => {
@@ -69,10 +69,11 @@ function Login() {
         setLoading(false);
 
         if (isLoggedIn) {
-          console.log(data.user.email);
+          // console.log(data.user.email);
 
           if (data.user.email) {
-            updatePersistState("email", data.user.email);
+            // setStateData("email", data.user.email);
+            setteacheremail(data.user.email);
           }
 
           try {
@@ -82,10 +83,12 @@ function Login() {
             if (teacherError) {
               console.error("Error fetching teacher details:", teacherError);
             }
-            console.log(teacherData);
-            updatePersistState("teacherData", teacherData);
-            updatePersistState("teacherID", teacherData[0].id);
-            updatePersistState("teacherName", teacherData[0].name);
+            // console.log(teacherData);
+            // setStateData("teacherData", teacherData);
+            setteacherdetails(teacherData);
+            // setStateData("teacherID", teacherData[0].id);
+            setteacherid(teacherData[0].id);
+            setteachername(teacherData[0].name);
           } catch (e) {
             console.error("Unexpected error fetching teacher details:", e);
           }

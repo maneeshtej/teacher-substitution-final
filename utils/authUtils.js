@@ -7,7 +7,7 @@ export const signIn = async (email, password) => {
         console.error("Sign-in error:", error);
         return {data: null, error}
     } else {
-        console.log("User signed in:", data); 
+        // console.log("User signed in:", data); 
         return {data, error: null}
     };
 }
@@ -19,7 +19,7 @@ export const getUser = async () => {
         console.error("error");
         return {data: null, error};
     } 
-    console.log(data);
+    // console.log(data);
     return {data, error: null}
 }
 

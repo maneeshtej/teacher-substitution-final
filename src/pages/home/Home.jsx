@@ -1,29 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { useManeeshState } from "../../context/StateProvider";
 import { isUserLoggedIn } from "../../../utils/authUtils";
 import { useNavigate } from "react-router-dom";
 import useCheckStatus from "../../hooks/useCheckStatus";
 import HomeContent from "./content/HomeContent";
+import useTeachStore from "../../context/useTeachStore";
 
 function Home() {
-  const { getPersistState, updatePersistState } = useManeeshState();
   const navigate = useNavigate();
   const { startChecking, stopChecking } = useCheckStatus();
-  const [teacherDetails, setTeacherDetails] = useState();
-  const [teacherID, setTeacherID] = useState();
-  const [teacherName, setTeacherName] = useState();
+  const { teachername, teacherid, teacherdetails } = useTeachStore();
+  const teacherDetails = useTeachStore((state) => state.teacherdetails);
+  const teacherID = useTeachStore((state) => state.teacherid);
+  const teacherName = useTeachStore((state) => state.teachername);
+  const [sortMethod, setSortMethod] = useState({
+    param: "date",
+    type: "asc",
+  });
 
   useEffect(() => {
     startChecking();
-    console.log("Started Checking");
+    // console.log("Started Checking");
     return () => stopChecking();
   }, [startChecking]);
 
-  useEffect(() => {
-    setTeacherDetails(getPersistState("teacherData") || null);
-    setTeacherID(getPersistState("teacherID") || null);
-    setTeacherName(getPersistState("teacherName") || null);
-  }, [getPersistState]);
+  // useEffect(() => {
+  //   setTeacherDetails(getStateData("teacherData") || null);
+  //   setTeacherID(getStateData("teacherID") || null);
+  //   setTeacherName(getStateData("teacherName") || null);
+  // }, [getStateData]);
 
   useEffect(() => {
     if (teacherDetails) {
@@ -32,12 +36,7 @@ function Home() {
   }, [teacherDetails, teacherID, teacherName]);
   return (
     // Main wrapper
-    <div
-      onClick={() => {
-        console.log(getPersistState("teacherData"));
-      }}
-      className="fixed h-[100vh] w-[100vw] text-textc bg-backgroundc font-inter tracking-[0.2px]"
-    >
+    <div className="fixed h-[100vh] w-[100vw] lg:w-[90vw] xl:w-[83vw] text-textc bg-backgroundc tracking-[0.2px] lg:ml-[10vw] xl:ml-[17vw]">
       {/*  */}
       {/* Header */}
       {/*  */}
@@ -88,7 +87,7 @@ function Home() {
             <span className="font-medium text-[17px]">Upcoming</span>
             <DropdownIconSvg />
           </div>
-          <SortIconSvg />
+          <SortDropdown setSortMethod={setSortMethod} sortMethod={sortMethod} />
         </div>
       </div>
       {/*  */}
@@ -99,7 +98,7 @@ function Home() {
       {/*  */}
       <div className="h-[4vh]"></div>
       <div className="px-[30px] h-[100%] overflow-scroll no-scrollbar">
-        <HomeContent></HomeContent>
+        <HomeContent sortInfo={sortMethod}></HomeContent>
       </div>
       {/*  */}
       {/*  */}
@@ -107,19 +106,28 @@ function Home() {
       {/* Footer */}
       {/*  */}
       {/*  */}
-      <div className="fixed flex items-center justify-center bottom-0 h-[10vh] w-[100%] bg-gradient-to-b from-transparent to-80% to-black">
-        <div className="flex items-center justify-between w-[60%]">
-          <div className="flex flex-col h-[100%] items-center gap-[6px]">
+      <div
+        className="fixed flex items-center justify-center bottom-0 lg:left-0 lg:w-[10vw] lg:h-[100vh] xl:w-[17vw] h-[10vh] w-[100%] lg:bg-black
+      bg-gradient-to-b from-transparent to-80% to-black"
+      >
+        <div className="flex items-center justify-between w-[60%] lg:flex-col lg:gap-[30px] xl:w-[100%]">
+          <div className="flex flex-col justify-between xl:flex-row h-[100%] items-center gap-[6px] xl:gap-[15px] xl:items-start xl:w-[50%] cursor-pointer">
             <HomeIconSvg />
-            <span className="text-[9px]">Home</span>
+            <span className="text-[9px] xl:text-[20px] xl:w-[100px] text-center">
+              Home
+            </span>
           </div>
-          <div className="flex flex-col h-[100%] items-center gap-[3px]">
+          <div className="flex flex-col justify-between xl:flex-row h-[100%] items-center gap-[6px] xl:gap-[15px] xl:items-start xl:w-[50%] cursor-pointer">
             <PlusIconSvg />
-            <span className="text-[9px]">New</span>
+            <span className="text-[9px] xl:text-[20px] xl:w-[100px] text-center">
+              New
+            </span>
           </div>
-          <div className="flex flex-col h-[100%] items-center gap-[6px]">
+          <div className="flex flex-col justify-between xl:flex-row h-[100%] items-center gap-[6px] xl:gap-[15px] xl:items-start xl:w-[50%] cursor-pointer">
             <ProfileIconSvg />
-            <span className="text-[9px]">Profile</span>
+            <span className="text-[9px] xl:text-[20px] xl:w-[100px] text-center">
+              Profile
+            </span>
           </div>
         </div>
       </div>
@@ -310,5 +318,97 @@ function ProfileIconSvg({}) {
         </g>
       </g>
     </svg>
+  );
+}
+
+function SortDropdown({ sortMethod, setSortMethod }) {
+  const [dropped, setDropped] = useState(false);
+
+  return (
+    <div className="relative flex w-[100%]">
+      {/* Dropdown Menu */}
+      <div
+        className={`absolute flex flex-col h-[30vh] w-[100%] bg-black ml-auto z-30 
+        rounded-[10px] p-[10px] transition-all duration-300 ease-in-out 
+        ${
+          dropped
+            ? "opacity-100 scale-100"
+            : "opacity-0 scale-95 pointer-events-none"
+        }`}
+      >
+        {/* Cancel Button */}
+        <div className="flex w-[100%] justify-end">
+          <button className="text-white" onClick={() => setDropped(false)}>
+            Cancel
+          </button>
+        </div>
+
+        <div className="h-[4vh]"></div>
+
+        {/* Options */}
+        <div className="flex flex-col items-end w-[100%] pr-[20px] font-[15px]">
+          <div
+            className="h-[6vh] cursor-pointer text-white hover:opacity-80 transition-all duration-200 ease-in-out "
+            style={{
+              color: sortMethod.param == "date" ? "white" : "gray",
+            }}
+            onClick={() => {
+              setSortMethod((prevState) => ({ ...prevState, param: "date" }));
+              setDropped(false);
+            }}
+          >
+            Date
+          </div>
+          <div
+            className="h-[6vh] cursor-pointer text-white hover:opacity-80 transition-all duration-200 ease-in-out "
+            onClick={() => {
+              setSortMethod((prevState) => ({
+                ...prevState,
+                param: "subject",
+              }));
+              setDropped(false);
+            }}
+            style={{
+              color: sortMethod.param == "subject" ? "white" : "gray",
+            }}
+          >
+            Subject
+          </div>
+          <div
+            className="h-[6vh] cursor-pointer text-white hover:opacity-80 transition-all duration-200 ease-in-out "
+            onClick={() => {
+              setSortMethod((prevState) => ({
+                ...prevState,
+                param: "teacher",
+              }));
+              setDropped(false);
+            }}
+            style={{
+              color: sortMethod.param == "teacher" ? "white" : "gray",
+            }}
+          >
+            Teacher
+          </div>
+        </div>
+      </div>
+
+      {/* Backdrop (closes dropdown on click) */}
+      <div
+        className={`fixed h-[100%] w-[100vw] left-0 top-0 backdrop-blur-[2px] z-20 
+        transition-opacity duration-300 ease-in-out 
+        ${dropped ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        onClick={() => setDropped(false)}
+      ></div>
+
+      {/* Dropdown Toggle Button */}
+      {!dropped && (
+        <div
+          className="ml-auto cursor-pointer"
+          onClick={() => setDropped(true)}
+        >
+          <SortIconSvg />
+        </div>
+      )}
+    </div>
   );
 }
