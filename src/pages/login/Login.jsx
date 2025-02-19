@@ -105,7 +105,7 @@ function Login() {
 
   return (
     <div /*{Main Wrapper}*/
-      className={`fixed overflow-y-hidden h-[100vh] w-[100vw] text-white`}
+      className={`fixed overflow-y-hidden h-[100vh] w-[100vw] text-textc`}
     >
       <div
         className={`fixed h-[100vh] w-[100vw] backdrop-blur-2xl z-10 
@@ -165,7 +165,7 @@ function Login() {
             </div>
 
             <div
-              className="flex items-center justify-center h-[7vh] w-[min(40%,200px)] rounded-[10px] mt-[15px] bg-black"
+              className="flex items-center justify-center h-[7vh] w-[min(40%,200px)] rounded-[10px] mt-[15px] bg-backgroundc"
               onClick={() => {
                 handleLogin();
               }}

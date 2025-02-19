@@ -11,15 +11,15 @@ function SubstitutionDetails() {
       onClick={() => {
         navigate("/home");
       }}
-      className="fixed bg-black h-[100vh] w-[100vw] overflow-hidden"
+      className="fixed bg-backgroundc h-[100vh] w-[100vw] overflow-hidden"
     >
       <div className="flex h-[7vh] items-center pl-[20px] border-b-[1px] border-gray-600">
-        <span className="text-white text-[20px] font-light">{"<   "}BACK</span>
+        <span className="text-textc text-[20px] font-light">{"<   "}BACK</span>
       </div>
 
       <div className="h-[100%] px-[20px] overflow-y-scroll no-scrollbar">
         <div className="h-[4vh]"></div>
-        <span className="text-[30px] text-white font-extralight tracking-wide">
+        <span className="text-[30px] text-textc font-extralight tracking-wide">
           Details
         </span>
         <div className="pl-[20px] h-[100%]">
@@ -27,8 +27,10 @@ function SubstitutionDetails() {
           {substitutionData && Object.keys(substitutionData).length > 0 ? (
             Object.keys(substitutionData).map((key, index) => (
               <>
-                <div className="flex text-white">
-                  <span className="min-w-[50%] font-extralight">{key} :</span>{" "}
+                <div className="flex text-textc">
+                  <span className="min-w-[50%] md:min-w-[40%] lg:min-w-[30%] xl:min-w-[20%] font-extralight">
+                    {key} :
+                  </span>{" "}
                   <span className="text-[rgb(200,200,200)]">
                     {substitutionData[key] ?? "none"}
                   </span>

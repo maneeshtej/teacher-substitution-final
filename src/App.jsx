@@ -5,6 +5,8 @@ import Login from "./pages/login/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/home/Home";
 import SubstitutionDetails from "./pages/substitution/SubstitutionDetails";
+import AddSubstitution from "./pages/substitution/AddSubstitution";
+import AnimationsManager from "./context/animation/AnimationManager";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -12,14 +14,20 @@ function App() {
   return (
     <div className="">
       <BrowserRouter>
-        <Routes>
+        <AnimationsManager>
           <Route path="/" element={<Login />} />
           <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
           <Route
             path="/home/subdetails"
             element={<ProtectedRoute element={<SubstitutionDetails />} />}
           />
-        </Routes>
+          <Route
+            path="/addsubstitution"
+            element={
+              <ProtectedRoute element={<AddSubstitution></AddSubstitution>} />
+            }
+          />
+        </AnimationsManager>
       </BrowserRouter>
     </div>
   );

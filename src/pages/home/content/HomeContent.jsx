@@ -64,7 +64,7 @@ function HomeContent({ sortInfo }) {
     console.log(groupedSubstitutions);
   }, [teacherSubstitutions]);
   return (
-    <div className="text-white font-medium text-[13px]">
+    <div className="text-textc font-medium text-[13px]">
       {groupedSubstitutions && Object.keys(groupedSubstitutions).length > 0 ? (
         Object.keys(groupedSubstitutions).map((data, index) => (
           <SubstitutionsGroup

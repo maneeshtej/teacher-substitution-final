@@ -1,3 +1,4 @@
+import { data } from "react-router-dom";
 import {supabase} from "./supabase.js"
 
 
@@ -90,6 +91,31 @@ export const getTeacherSubstitutionsByID = async (ID) => {
 
     } catch (error) {
         console.error("error : ", error);
+        return {data:null, error};
+    }
+}
+
+export const getTeacherTimetableByID = async (ID) => {
+    if (!ID) {
+        console.error("error : no ID");
+        return {data:null, error:"no ID"};
+    }
+
+    try {
+        const {data, error} = await supabase
+        .from("Classes")
+        .select("*")
+        .eq("teacher_id", ID);
+
+        if (error) {
+            return {data:null, error: error};
+        } 
+
+        if (data) {
+            return {data, error:null}
+        }
+    } catch (error) {
+        console.error("error : ",  error);
         return {data:null, error};
     }
 }

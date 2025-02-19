@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useCheckStatus from "../../hooks/useCheckStatus";
 import HomeContent from "./content/HomeContent";
 import useTeachStore from "../../context/useTeachStore";
+import { useAnimation } from "../../context/animation/AnimationManager";
 
 function Home() {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ function Home() {
     param: "date",
     type: "asc",
   });
+  const { handleNavigation } = useAnimation();
 
   useEffect(() => {
     startChecking();
@@ -36,15 +38,18 @@ function Home() {
   }, [teacherDetails, teacherID, teacherName]);
   return (
     // Main wrapper
-    <div className="fixed h-[100vh] w-[100vw] lg:w-[90vw] xl:w-[83vw] text-textc bg-backgroundc tracking-[0.2px] lg:ml-[10vw] xl:ml-[17vw]">
+    <div className="fixed h-[100vh] w-[100vw] lg:w-[90vw] xl:w-[85vw] text-textc bg-backgroundc tracking-[0.2px] lg:ml-[10vw] xl:ml-[15vw] lg:pt-[6vh]">
       {/*  */}
       {/* Header */}
       {/*  */}
       <div className="h-[2vh] flex"></div>
-      <div className="flex w-[100%] items-end px-[20px]">
+      <div
+        className="flex lg:items-center w-[100%] items-end px-[20px] lg:fixed lg:top-0 bg-backgroundc lg:left-0 z-10 lg:border-b-[1px] 
+        border-[rgb(70,70,70)] lg:h-[10vh]"
+      >
         <div className="flex items-center gap-[15px] w-[100%]">
           <div className="min-h-[35px] min-w-[35px] bg-white rounded-[100px]"></div>
-          <span className="font-[15px] tracking-[0.5px] text-[25px]">
+          <span className="font-[15px] tracking-[0.5px] text-textc]">
             {teacherName || "unknown"}
           </span>
           {/*  */}
@@ -53,7 +58,7 @@ function Home() {
           <div className=" w-[100%] md:w-[70%] xl:w-[70vw] 2xl:w-[55vw] px-[20px] items-end hidden md:flex">
             <div className="flex items-center bg-white h-[6vh] w-[100%] rounded-[5px] px-[10px] gap-[15px]">
               <SearchIconSvg />
-              <span className="text-black font-medium">Search</span>
+              <span className="text-textc font-medium">Search</span>
             </div>
           </div>
           {/*  */}
@@ -71,7 +76,7 @@ function Home() {
       <div className=" w-[100%] px-[20px] flex items-end md:hidden">
         <div className="flex items-center bg-white h-[6vh] w-[100%] rounded-[5px] px-[10px] gap-[15px]">
           <SearchIconSvg />
-          <span className="text-black font-medium">Search</span>
+          <span className="text-textc font-medium">Search</span>
         </div>
       </div>
       {/*  */}
@@ -80,11 +85,12 @@ function Home() {
       {/* Filters */}
       {/*  */}
       {/*  */}
+      <div className=""></div>
       <div className="h-[4vh]"></div>
       <div className="flex items-end w-[100%] px-[30px]">
         <div className="flex items-center w-[100%] gap-[15px]">
           <div className="flex flex-row items-center gap-[5px]">
-            <span className="font-medium text-[17px]">Upcoming</span>
+            <span className="font-medium text-textc]">Upcoming</span>
             <DropdownIconSvg />
           </div>
           <SortDropdown setSortMethod={setSortMethod} sortMethod={sortMethod} />
@@ -107,25 +113,31 @@ function Home() {
       {/*  */}
       {/*  */}
       <div
-        className="fixed flex items-center justify-center bottom-0 lg:left-0 lg:w-[10vw] lg:h-[100vh] xl:w-[17vw] h-[10vh] w-[100%] lg:bg-black
-      bg-gradient-to-b from-transparent to-80% to-black"
+        className="fixed flex items-center justify-center bottom-0 md:border-r-[1px] border-[rgb(70,70,70)] lg:left-0 lg:w-[10vw] lg:h-[100vh] xl:w-[15vw] 
+        h-[10vh] w-[100%] lg:bg-backgroundc bg-gradient-to-b from-transparent to-80% to-black"
       >
         <div className="flex items-center justify-between w-[60%] lg:flex-col lg:gap-[30px] xl:w-[100%]">
           <div className="flex flex-col justify-between xl:flex-row h-[100%] items-center gap-[6px] xl:gap-[15px] xl:items-start xl:w-[50%] cursor-pointer">
             <HomeIconSvg />
-            <span className="text-[9px] xl:text-[20px] xl:w-[100px] text-center">
+            <span className="text-textc xl:text-textc] xl:w-[100px] text-textcr">
               Home
             </span>
           </div>
-          <div className="flex flex-col justify-between xl:flex-row h-[100%] items-center gap-[6px] xl:gap-[15px] xl:items-start xl:w-[50%] cursor-pointer">
+          <div
+            className="flex flex-col justify-between xl:flex-row h-[100%] items-center gap-[6px] xl:gap-[15px] xl:items-start xl:w-[50%] cursor-pointer"
+            onClick={() => {
+              // navigate("/addsubstitution");
+              handleNavigation("/addsubstitution");
+            }}
+          >
             <PlusIconSvg />
-            <span className="text-[9px] xl:text-[20px] xl:w-[100px] text-center">
+            <span className="text-textc xl:text-textc] xl:w-[100px] text-textcr">
               New
             </span>
           </div>
           <div className="flex flex-col justify-between xl:flex-row h-[100%] items-center gap-[6px] xl:gap-[15px] xl:items-start xl:w-[50%] cursor-pointer">
             <ProfileIconSvg />
-            <span className="text-[9px] xl:text-[20px] xl:w-[100px] text-center">
+            <span className="text-textc xl:text-textc] xl:w-[100px] text-textcr">
               Profile
             </span>
           </div>
@@ -328,7 +340,7 @@ function SortDropdown({ sortMethod, setSortMethod }) {
     <div className="relative flex w-[100%]">
       {/* Dropdown Menu */}
       <div
-        className={`absolute flex flex-col h-[30vh] w-[100%] bg-black ml-auto z-30 
+        className={`absolute flex flex-col h-[30vh] w-[100%] bg-backgroundc ml-auto z-30 
         rounded-[10px] p-[10px] transition-all duration-300 ease-in-out 
         ${
           dropped
@@ -338,7 +350,7 @@ function SortDropdown({ sortMethod, setSortMethod }) {
       >
         {/* Cancel Button */}
         <div className="flex w-[100%] justify-end">
-          <button className="text-white" onClick={() => setDropped(false)}>
+          <button className="text-textc" onClick={() => setDropped(false)}>
             Cancel
           </button>
         </div>
@@ -348,7 +360,7 @@ function SortDropdown({ sortMethod, setSortMethod }) {
         {/* Options */}
         <div className="flex flex-col items-end w-[100%] pr-[20px] font-[15px]">
           <div
-            className="h-[6vh] cursor-pointer text-white hover:opacity-80 transition-all duration-200 ease-in-out "
+            className="h-[6vh] cursor-pointer text-textc hover:opacity-80 transition-all duration-200 ease-in-out "
             style={{
               color: sortMethod.param == "date" ? "white" : "gray",
             }}
@@ -360,7 +372,7 @@ function SortDropdown({ sortMethod, setSortMethod }) {
             Date
           </div>
           <div
-            className="h-[6vh] cursor-pointer text-white hover:opacity-80 transition-all duration-200 ease-in-out "
+            className="h-[6vh] cursor-pointer text-textc hover:opacity-80 transition-all duration-200 ease-in-out "
             onClick={() => {
               setSortMethod((prevState) => ({
                 ...prevState,
@@ -375,7 +387,7 @@ function SortDropdown({ sortMethod, setSortMethod }) {
             Subject
           </div>
           <div
-            className="h-[6vh] cursor-pointer text-white hover:opacity-80 transition-all duration-200 ease-in-out "
+            className="h-[6vh] cursor-pointer text-textc hover:opacity-80 transition-all duration-200 ease-in-out "
             onClick={() => {
               setSortMethod((prevState) => ({
                 ...prevState,
