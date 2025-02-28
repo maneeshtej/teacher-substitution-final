@@ -129,7 +129,7 @@ function Login() {
         {/* Main */}
       </div>
       <div className="transition-all duration-500 ease-in-out">
-        <BackgroundWaves />
+        {/* <BackgroundWaves /> */}
         <div
           className={`flex items-center justify-start
             flex-col gap-[30px] h-[100vh] bg-[#FAC375] sm:bg-[#ffefd8] transition-all duration-500 ease-in-out`}

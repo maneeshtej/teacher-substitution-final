@@ -1,155 +1,222 @@
-import React, { useEffect, useState } from "react";
-import { isUserLoggedIn } from "../../../utils/authUtils";
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import useCheckStatus from "../../hooks/useCheckStatus";
-import HomeContent from "./content/HomeContent";
 import useTeachStore from "../../context/useTeachStore";
-import { useAnimation } from "../../context/animation/AnimationManager";
+import HomeContent from "./content/HomeContent";
 
 function Home() {
+  // React Hook for navigation (Used to programmatically navigate to different pages)
   const navigate = useNavigate();
-  const { startChecking, stopChecking } = useCheckStatus();
-  const { teachername, teacherid, teacherdetails } = useTeachStore();
-  const teacherDetails = useTeachStore((state) => state.teacherdetails);
-  const teacherID = useTeachStore((state) => state.teacherid);
+
+  // Zustand Store:
+  // - teacherName: String -> Stores the teacher's name.
+  // - teacherID: String or Number -> Stores the teacher's unique ID.
+  // - teacherDetails: Object -> Stores additional details of the teacher.
   const teacherName = useTeachStore((state) => state.teachername);
-  const [sortMethod, setSortMethod] = useState({
-    param: "date",
-    type: "asc",
-  });
-  const { handleNavigation } = useAnimation();
+  const teacherID = useTeachStore((state) => state.teacherid);
+  const teacherDetails = useTeachStore((state) => state.teacherdetails);
 
+  // State for sorting method:
+  // - param: "date" or other criteria -> Determines the sorting parameter.
+  // - type: "asc" | "desc" -> Specifies ascending or descending order.
+
+  // Extract function from custom hook (Used for animations)
+
+  // Loading state:
+  // - Boolean value, initially `true`, becomes `false` once `teacherDetails` is available.
+  const [loading, setLoading] = useState(true);
+  const [sidebarState, setSidebarState] = useState(false);
+  const [type, setType] = useState("sent");
+  const [pageLoad, setPageLoad] = useState(false);
+
+  // Effect Hook:
+  // - Checks if `teacherDetails` is defined, then updates `loading` state.
   useEffect(() => {
-    startChecking();
-    // console.log("Started Checking");
-    return () => stopChecking();
-  }, [startChecking]);
-
-  // useEffect(() => {
-  //   setTeacherDetails(getStateData("teacherData") || null);
-  //   setTeacherID(getStateData("teacherID") || null);
-  //   setTeacherName(getStateData("teacherName") || null);
-  // }, [getStateData]);
-
-  useEffect(() => {
-    if (teacherDetails) {
-      // console.log(teacherID, teacherName);
+    if (teacherDetails !== undefined && teacherDetails !== null) {
+      setLoading(false);
     }
-  }, [teacherDetails, teacherID, teacherName]);
+  }, [teacherDetails]);
+
   return (
-    // Main wrapper
-    <div className="fixed h-[100vh] w-[100vw] lg:w-[90vw] xl:w-[85vw] text-textc bg-backgroundc tracking-[0.2px] lg:ml-[10vw] xl:ml-[15vw] lg:pt-[6vh]">
-      {/*  */}
-      {/* Header */}
-      {/*  */}
-      <div className="h-[2vh] flex"></div>
+    <div className="fixed h-[100dvh] w-[100vw] lg:w-[90vw] xl:w-[85vw] text-textc bg-backgroundc tracking-[0.2px] lg:ml-[10vw] xl:ml-[15vw] lg:pt-[6vh]">
       <div
-        className="flex lg:items-center w-[100%] items-end px-[20px] lg:fixed lg:top-0 bg-backgroundc lg:left-0 z-10 lg:border-b-[1px] 
-        border-[rgb(70,70,70)] lg:h-[10vh]"
+        className={`fixed h-[100dvh] w-[100vw] z-50 bg-black/50 left-0 right-0 ${
+          pageLoad ? "opacity-100 " : "opacity-0 pointer-events-none"
+        } transition-all duration-200 ease-in-out`}
       >
-        <div className="flex items-center gap-[15px] w-[100%]">
-          <div className="min-h-[35px] min-w-[35px] bg-white rounded-[100px]"></div>
-          <span className="font-[15px] tracking-[0.5px] text-textc]">
-            {teacherName || "unknown"}
-          </span>
-          {/*  */}
-          {/* SearchBar */}
-          {/*  */}
-          <div className=" w-[100%] md:w-[70%] xl:w-[70vw] 2xl:w-[55vw] px-[20px] items-end hidden md:flex">
+        <div
+          className={`h-[10dvh] bg-black border-b-[1px] border-[rgb(70,70,70)] flex items-center pl-[min(3vw,50px)] ${
+            pageLoad ? "translate-y-[0dvh]" : "translate-y-[-10dvh]"
+          } transition-all duration-200 ease-in-out`}
+        >
+          <span className="font-light text-xl animate-pulse">Loading</span>
+        </div>
+      </div>
+      {/* Conditional Rendering: Show Skeleton Loader if Loading */}
+      {loading ? (
+        <HomeSkeleton />
+      ) : (
+        <>
+          {/* Sidebar */}
+          <div
+            className={`fixed h-[100dvh] w-[100vw] backdrop-blur-sm z-50 ${
+              !sidebarState ? "translate-x-[-100vw]" : ""
+            } transition-all duration-200 ease-in-out`}
+            onClick={() => {
+              setSidebarState(false);
+            }}
+          >
+            <div className="h-[100dvh] w-[min(80vw,300px)] bg-backgroundc">
+              <div className="flex flex-col gap-[4dvh] font-light text-2xl pl-[min(3vw,50px)]">
+                <span
+                  onClick={() => {
+                    setType("sent");
+                    setSidebarState(false);
+                  }}
+                >
+                  Sent
+                </span>
+                <span
+                  onClick={() => {
+                    setType("rec");
+                    setSidebarState(false);
+                  }}
+                >
+                  Recieved
+                </span>
+                <span onClick={() => {}}>Recycle Bin</span>
+              </div>
+            </div>
+          </div>
+          {/* Header Section */}
+          <div className="h-[2vh] flex"></div>
+          <div className="flex lg:items-center w-[100%] items-end px-[20px] lg:fixed lg:top-0 bg-backgroundc lg:left-0 z-10 lg:border-b-[1px] border-[rgb(70,70,70)] lg:h-[10vh]">
+            <div className="flex items-center gap-[15px] w-[100%]">
+              <svg
+                width="30px"
+                height="30px"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                onClick={() => {
+                  setSidebarState(true);
+                }}
+              >
+                <path
+                  d="M4 6H20M4 12H20M4 18H20"
+                  stroke="rgb(255,255,255)"
+                  stroke-width="1"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+
+              {/* Desktop Search Bar */}
+              <div className="w-[100%] md:w-[70%] xl:w-[70vw] 2xl:w-[55vw] px-[20px] items-end hidden md:flex">
+                <div className="flex items-center bg-white h-[6vh] w-[100%] rounded-[5px] px-[10px] gap-[15px]">
+                  <SearchIconSvg />
+                  <span className="text-textc font-medium">Search</span>
+                </div>
+              </div>
+
+              {/* Notification Icon (Component for Notifications) */}
+              <div onClick={() => setPageLoad(true)} className="ml-auto">
+                <NotificationSvg />
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Search Bar (Only Visible on Small Screens) */}
+          <div className="h-[4vh] md:hidden"></div>
+          <div className="w-[100%] px-[20px] flex items-end md:hidden">
             <div className="flex items-center bg-white h-[6vh] w-[100%] rounded-[5px] px-[10px] gap-[15px]">
               <SearchIconSvg />
               <span className="text-textc font-medium">Search</span>
             </div>
           </div>
-          {/*  */}
-          {/*  */}
 
-          <NotificationSvg />
-        </div>
-      </div>
-      {/*  */}
-      {/*  */}
-      {/*  */}
-      {/* SearchBar */}
-      {/*  */}
-      <div className="h-[4vh] md:hidden"></div>
-      <div className=" w-[100%] px-[20px] flex items-end md:hidden">
-        <div className="flex items-center bg-white h-[6vh] w-[100%] rounded-[5px] px-[10px] gap-[15px]">
-          <SearchIconSvg />
-          <span className="text-textc font-medium">Search</span>
-        </div>
-      </div>
-      {/*  */}
-      {/*  */}
-      {/*  */}
-      {/* Filters */}
-      {/*  */}
-      {/*  */}
-      <div className=""></div>
-      <div className="h-[4vh]"></div>
-      <div className="flex items-end w-[100%] px-[30px]">
-        <div className="flex items-center w-[100%] gap-[15px]">
-          <div className="flex flex-row items-center gap-[5px]">
-            <span className="font-medium text-textc]">Upcoming</span>
-            <DropdownIconSvg />
+          {/* Home Content Section */}
+          <div className="h-[4vh] border-b-[1px] border-[rgb(50,50,50)] lg:hidden"></div>
+          <div className="h-[100%] overflow-scroll no-scrollbar">
+            {/* Render Memoized HomeContent */}
+            <HomeContent type={type}></HomeContent>
           </div>
-          <SortDropdown setSortMethod={setSortMethod} sortMethod={sortMethod} />
-        </div>
-      </div>
-      {/*  */}
-      {/*  */}
-      {/*  */}
-      {/* HomeContent */}
-      {/*  */}
-      {/*  */}
-      <div className="h-[4vh]"></div>
-      <div className="px-[30px] h-[100%] overflow-scroll no-scrollbar">
-        <HomeContent sortInfo={sortMethod}></HomeContent>
-      </div>
-      {/*  */}
-      {/*  */}
-      {/*  */}
-      {/* Footer */}
-      {/*  */}
-      {/*  */}
-      <div
-        className="fixed flex items-center justify-center bottom-[10vh] md:bottom-0 md:border-r-[1px] border-[rgb(70,70,70)] lg:left-0 lg:w-[10vw] lg:h-[100vh] xl:w-[15vw] 
-        h-[10vh] w-[100%] lg:bg-backgroundc bg-gradient-to-b from-transparent to-80% to-black"
-      >
-        <div className="flex items-center justify-between w-[60%] lg:flex-col lg:gap-[30px] xl:w-[100%]">
-          <div className="flex flex-col justify-between xl:flex-row h-[100%] items-center gap-[6px] xl:gap-[15px] xl:items-start xl:w-[50%] cursor-pointer">
-            <HomeIconSvg />
-            <span className="text-textc xl:text-textc] xl:w-[100px] text-textcr">
-              Home
-            </span>
+
+          {/* Footer Navigation */}
+          <div className="fixed flex items-center justify-center top-[90dvh] lg:top-[0dvh] lg:bottom-[0dvh] md:bottom-0 md:border-r-[1px] border-[rgb(70,70,70)] lg:left-0 lg:w-[10vw] lg:h-[100vh] xl:w-[15vw] h-[10vh] w-[100%] lg:bg-backgroundc bg-gradient-to-b from-transparent to-80% to-black">
+            <div className="flex items-center justify-between w-[60%] lg:flex-col lg:gap-[30px] xl:w-[100%]">
+              {/* Home Button (Redirects to Home Page) */}
+              <div className="flex flex-col justify-between xl:flex-row h-[100%] items-center gap-[6px] xl:gap-[15px] xl:items-start xl:w-[50%] cursor-pointer">
+                <HomeIconSvg />
+                <span className="text-textc xl:text-textc] xl:w-[100px] text-textcr">
+                  Home
+                </span>
+              </div>
+
+              {/* New Substitution Button (Redirects to Add Substitution Page) */}
+              <div
+                className="flex flex-col justify-between xl:flex-row h-[100%] items-center gap-[6px] xl:gap-[15px] xl:items-start xl:w-[50%] cursor-pointer"
+                onClick={() => {
+                  setPageLoad(true);
+                  navigate("/selecttype");
+                }}
+              >
+                <PlusIconSvg />
+                <span className="text-textc xl:text-textc] xl:w-[100px] text-textcr">
+                  New
+                </span>
+              </div>
+
+              {/* Profile Button (Redirects to Profile Page) */}
+              <div
+                className="flex flex-col justify-between xl:flex-row h-[100%] items-center gap-[6px] xl:gap-[15px] xl:items-start xl:w-[50%] cursor-pointer"
+                onClick={() => {
+                  navigate("/recent");
+                }}
+              >
+                <ProfileIconSvg />
+                <span className="text-textc xl:text-textc] xl:w-[100px] text-textcr">
+                  Recent
+                </span>
+              </div>
+            </div>
           </div>
-          <div
-            className="flex flex-col justify-between xl:flex-row h-[100%] items-center gap-[6px] xl:gap-[15px] xl:items-start xl:w-[50%] cursor-pointer"
-            onClick={() => {
-              // navigate("/addsubstitution");
-              handleNavigation("/addsubstitution");
-            }}
-          >
-            <PlusIconSvg />
-            <span className="text-textc xl:text-textc] xl:w-[100px] text-textcr">
-              New
-            </span>
-          </div>
-          <div className="flex flex-col justify-between xl:flex-row h-[100%] items-center gap-[6px] xl:gap-[15px] xl:items-start xl:w-[50%] cursor-pointer">
-            <ProfileIconSvg />
-            <span className="text-textc xl:text-textc] xl:w-[100px] text-textcr">
-              Profile
-            </span>
-          </div>
-        </div>
-      </div>
-      {/*  */}
-      {/*  */}
+        </>
+      )}
     </div>
   );
 }
 
 export default Home;
+
+const HomeSkeleton = () => {
+  return (
+    <div className="animate-pulse flex flex-col gap-4 p-5">
+      {/* Header Skeleton */}
+      <div className="flex items-center gap-[15px]">
+        <div className="h-10 w-10 bg-gray-300 rounded-full"></div>
+        <div className="h-4 w-32 bg-gray-300 rounded-md"></div>
+      </div>
+
+      {/* Search Bar Skeleton */}
+      <div className="w-full md:w-[70%] xl:w-[70vw] 2xl:w-[55vw] px-[20px]">
+        <div className="flex items-center bg-gray-300 h-[6vh] w-full rounded-[5px]"></div>
+      </div>
+
+      {/* Filters Skeleton */}
+      <div className="flex items-center gap-4">
+        <div className="h-6 w-24 bg-gray-300 rounded-md"></div>
+        <div className="h-6 w-20 bg-gray-300 rounded-md"></div>
+      </div>
+
+      {/* Content Skeleton */}
+      <div className="flex flex-col gap-4">
+        {[...Array(3)].map((_, i) => (
+          <div key={i} className="h-16 w-full bg-gray-300 rounded-md"></div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 function NotificationSvg({}) {
   return (
@@ -215,38 +282,6 @@ function DropdownIconSvg({}) {
           <polygon id="Shape" points="5 8 12 16 19 8"></polygon>
         </g>
       </g>
-    </svg>
-  );
-}
-
-function SortIconSvg({}) {
-  return (
-    <svg
-      width="20px"
-      height="20px"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="ml-auto"
-    >
-      <path
-        d="M22 7L2 7"
-        stroke="rgb(255,255,255)"
-        stroke-width="1.5"
-        stroke-linecap="round"
-      />
-      <path
-        d="M19 12L5 12"
-        stroke="rgb(255,255,255)"
-        stroke-width="1.5"
-        stroke-linecap="round"
-      />
-      <path
-        d="M16 17H8"
-        stroke="rgb(255,255,255)"
-        stroke-width="1.5"
-        stroke-linecap="round"
-      />
     </svg>
   );
 }
@@ -331,96 +366,39 @@ function ProfileIconSvg({}) {
       </g>
     </svg>
   );
-}
 
-function SortDropdown({ sortMethod, setSortMethod }) {
-  const [dropped, setDropped] = useState(false);
-
-  return (
-    <div className="relative flex w-[100%]">
-      {/* Dropdown Menu */}
+  function Sidebar({ sidebarState, setSidebarState, setType }) {
+    return (
       <div
-        className={`absolute flex flex-col h-[30vh] w-[100%] bg-backgroundc ml-auto z-30 
-        rounded-[10px] p-[10px] transition-all duration-300 ease-in-out 
-        ${
-          dropped
-            ? "opacity-100 scale-100"
-            : "opacity-0 scale-95 pointer-events-none"
-        }`}
+        className={`fixed h-[100dvh] w-[100vw] backdrop-blur-sm z-50 ${
+          !sidebarState ? "translate-x-[-100vw]" : ""
+        } transition-all duration-200 ease-in-out`}
+        onClick={() => {
+          setSidebarState(false);
+        }}
       >
-        {/* Cancel Button */}
-        <div className="flex w-[100%] justify-end">
-          <button className="text-textc" onClick={() => setDropped(false)}>
-            Cancel
-          </button>
-        </div>
-
-        <div className="h-[4vh]"></div>
-
-        {/* Options */}
-        <div className="flex flex-col items-end w-[100%] pr-[20px] font-[15px]">
-          <div
-            className="h-[6vh] cursor-pointer text-textc hover:opacity-80 transition-all duration-200 ease-in-out "
-            style={{
-              color: sortMethod.param == "date" ? "white" : "gray",
-            }}
-            onClick={() => {
-              setSortMethod((prevState) => ({ ...prevState, param: "date" }));
-              setDropped(false);
-            }}
-          >
-            Date
-          </div>
-          <div
-            className="h-[6vh] cursor-pointer text-textc hover:opacity-80 transition-all duration-200 ease-in-out "
-            onClick={() => {
-              setSortMethod((prevState) => ({
-                ...prevState,
-                param: "subject",
-              }));
-              setDropped(false);
-            }}
-            style={{
-              color: sortMethod.param == "subject" ? "white" : "gray",
-            }}
-          >
-            Subject
-          </div>
-          <div
-            className="h-[6vh] cursor-pointer text-textc hover:opacity-80 transition-all duration-200 ease-in-out "
-            onClick={() => {
-              setSortMethod((prevState) => ({
-                ...prevState,
-                param: "teacher",
-              }));
-              setDropped(false);
-            }}
-            style={{
-              color: sortMethod.param == "teacher" ? "white" : "gray",
-            }}
-          >
-            Teacher
+        <div className="h-[100dvh] w-[min(80vw,300px)] bg-backgroundc">
+          <div className="flex flex-col gap-[4dvh] font-light text-2xl pl-[min(3vw,50px)]">
+            <span
+              onClick={() => {
+                setType("sent");
+                setSidebarState(false);
+              }}
+            >
+              Sent
+            </span>
+            <span
+              onClick={() => {
+                setType("rec");
+                setSidebarState(false);
+              }}
+            >
+              Recieved
+            </span>
+            <span onClick={() => {}}>Recycle Bin</span>
           </div>
         </div>
       </div>
-
-      {/* Backdrop (closes dropdown on click) */}
-      <div
-        className={`fixed h-[100%] w-[100vw] left-0 top-0 backdrop-blur-[2px] z-20 
-        transition-opacity duration-300 ease-in-out 
-        ${dropped ? "opacity-100" : "opacity-0 pointer-events-none"}`}
-        onClick={() => setDropped(false)}
-      ></div>
-
-      {/* Dropdown Toggle Button */}
-      {!dropped && (
-        <div
-          className="ml-auto cursor-pointer"
-          onClick={() => setDropped(true)}
-        >
-          <SortIconSvg />
-        </div>
-      )}
-    </div>
-  );
+    );
+  }
 }

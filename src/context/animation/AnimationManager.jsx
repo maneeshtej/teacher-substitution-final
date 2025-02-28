@@ -194,7 +194,7 @@ function AnimationsManager({ children }) {
       }}
     >
       <div
-        className=" fixed h-[100vh] w-[100%] bg-backgroundc text-textc"
+        className=" fixed h-[100dvh] w-[100%] bg-backgroundc text-textc"
         style={{
           perspective: "1500px",
         }}
@@ -309,7 +309,7 @@ function AnimationsManager({ children }) {
           className={`animated-element ${animation} ${
             settings ? "open-settings" : "close-settings"
           } 
-            h-[100vh] w-[100%] 
+            h-[100dvh] w-[100%] 
             transition-all duration-300 ease-in-out 
             overflow-hidden`}
           style={{

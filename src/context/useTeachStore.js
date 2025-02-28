@@ -9,12 +9,16 @@ const useTeachStore = create(
       teacherdetails: null,
       teachersubstitutions: null,
       teacheremail: null,
+      teachersubstitutionstosend: null,
 
       setteacherid: (data) => set(() => ({ teacherid: data })),
       setteachername: (data) => set(() => ({ teachername: data })),
       setteacherdetails: (data) => set(() => ({ teacherdetails: data })),
-      setteachersubstitutions: (data) => set(() => ({ teachersubstitutions: data })),
+      setteachersubstitutions: (data) =>
+        set(() => ({ teachersubstitutions: data })),
       setteacheremail: (data) => set(() => ({ teacheremail: data })),
+      setteachersubstitutionstosend: (data) =>
+        set(() => ({ teachersubstitutionstosend: data })),
     }),
     {
       name: "teacher-storage",

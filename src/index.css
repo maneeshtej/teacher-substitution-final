@@ -3,21 +3,42 @@
 @theme {
   --font-open-sans: "Open Sans", serif;
   --font-brush: "Grechen Fuemen", serif;
-  --font-cursive : "Dancing Script", serif;
-  --font-inter : "Inter", serif;
+  --font-cursive: "Dancing Script", serif;
+  --font-inter: "Inter", serif;
 
   --color-backgroundc: rgb(0, 0, 0);
   --color-textc: rgb(255, 255, 255);
+
+  --animate-floatup: floatUp ease-in-out 500ms;
+
+  @keyframes floatUp {
+    0% {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    80% {
+      transform: translateY(-5px);
+      opacity: 1;
+    }
+    90% {
+      transform: translateY(5px);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(0px);
+      opacity: 1;
+    }
+  }
 }
 
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
-      display: none;
+    display: none;
   }
   .no-scrollbar {
-      -ms-overflow-style: none; 
-      scrollbar-width: none;  
-}
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 .mainwholnows {
