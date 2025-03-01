@@ -2,19 +2,27 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { visualizer } from "rollup-plugin-visualizer";
+import path from "path";
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
     visualizer({
-      filename: "bundle-analysis.html", // Output file
-      open: true, // Open report automatically
-      gzipSize: true, // Show gzipped size
-      brotliSize: true, // Show brotli compressed size
+      filename: "bundle-analysis.html",
+      open: true,
+      gzipSize: true,
+      brotliSize: true,
     }),
   ],
+  resolve: {
+    alias: {
+      "@supabase/supabase-js": path.resolve(
+        __dirname,
+        "node_modules/@supabase/supabase-js/dist/module/index.js"
+      ),
+    },
+  },
   server: {
     host: "0.0.0.0",
     port: 3000,
@@ -29,7 +37,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ["react", "react-dom", "zustand", "supabase-js"],
+          vendor: ["react", "react-dom", "zustand", "@supabase/supabase-js"],
         },
       },
     },

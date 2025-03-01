@@ -12,7 +12,6 @@ const queryClient = new QueryClient();
 const SplashScreen = () => (
   <div className="fixed inset-0 flex items-center justify-center bg-black text-white text-2xl font-anton">
     <div className="animate-pulse">
-      {" "}
       <h1>Teacher</h1>
       <h1>Substitution</h1>{" "}
     </div>
