@@ -45,7 +45,7 @@ function EditSubstitutions() {
   };
 
   return (
-    <div className="h-[100dvh] w-[100%] px-[min(3vw,50px)]">
+    <div className="h-[100dvh] w-[100%] px-[min(3vw,50px)] text-textc">
       <div className="h-[7dvh] flex items-center justify-between  font-light">
         <button
           onClick={() => {

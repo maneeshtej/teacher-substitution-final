@@ -1,4 +1,3 @@
-import { data } from "react-router-dom";
 import { supabase } from "./supabase";
 
 export const signIn = async (email, password) => {

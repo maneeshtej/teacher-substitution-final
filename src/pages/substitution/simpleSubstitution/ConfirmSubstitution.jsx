@@ -93,6 +93,7 @@ function ConfirmSubstitution() {
 
     if (hasDuplicates) {
       console.error("Duplicates found! Sending aborted.");
+      setLoadPage(false);
       return;
     }
 
