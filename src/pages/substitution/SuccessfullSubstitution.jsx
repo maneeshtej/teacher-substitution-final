@@ -76,6 +76,13 @@ function SuccessfullSubstitution() {
         ) : (
           <div>No</div>
         )}
+        <button
+          onClick={() => {
+            navigate("/home");
+          }}
+        >
+          Home
+        </button>
       </div>
     </div>
   );

@@ -53,55 +53,59 @@ function App() {
           </div>
         }
       >
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route
-              path="/home"
-              element={<ProtectedRoute element={<Home />} />}
-            />
-            <Route
-              path="/home/subdetails"
-              element={<ProtectedRoute element={<SubstitutionDetails />} />}
-            />
-            <Route
-              path="/addsubstitution"
-              element={<ProtectedRoute element={<AddSubstitution />} />}
-            />
-            <Route
-              path="/confirmsubstitution"
-              element={<ProtectedRoute element={<ConfirmSubstitution />} />}
-            />
-            <Route
-              path="/editsubstitution"
-              element={<ProtectedRoute element={<EditSubstitutions />} />}
-            />
-            <Route
-              path="/selecttype"
-              element={<ProtectedRoute element={<SelectorPage />} />}
-            />
-            <Route
-              path="/addsubstitution2"
-              element={<ProtectedRoute element={<AddSubstitution2 />} />}
-            />
-            <Route
-              path="/confirmsubstitution2"
-              element={<ProtectedRoute element={<ConfirmSubstitution2 />} />}
-            />
-            <Route
-              path="/recent"
-              element={<ProtectedRoute element={<Recent />} />}
-            />
-            <Route
-              path="/success"
-              element={<ProtectedRoute element={<SuccessfullSubstitution />} />}
-            />
-            <Route
-              path="/print"
-              element={<ProtectedRoute element={<Printable />} />}
-            />
-          </Routes>
-        </BrowserRouter>
+        <div className="bg-backgroundc">
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route
+                path="/home"
+                element={<ProtectedRoute element={<Home />} />}
+              />
+              <Route
+                path="/home/subdetails"
+                element={<ProtectedRoute element={<SubstitutionDetails />} />}
+              />
+              <Route
+                path="/addsubstitution"
+                element={<ProtectedRoute element={<AddSubstitution />} />}
+              />
+              <Route
+                path="/confirmsubstitution"
+                element={<ProtectedRoute element={<ConfirmSubstitution />} />}
+              />
+              <Route
+                path="/editsubstitution"
+                element={<ProtectedRoute element={<EditSubstitutions />} />}
+              />
+              <Route
+                path="/selecttype"
+                element={<ProtectedRoute element={<SelectorPage />} />}
+              />
+              <Route
+                path="/addsubstitution2"
+                element={<ProtectedRoute element={<AddSubstitution2 />} />}
+              />
+              <Route
+                path="/confirmsubstitution2"
+                element={<ProtectedRoute element={<ConfirmSubstitution2 />} />}
+              />
+              <Route
+                path="/recent"
+                element={<ProtectedRoute element={<Recent />} />}
+              />
+              <Route
+                path="/success"
+                element={
+                  <ProtectedRoute element={<SuccessfullSubstitution />} />
+                }
+              />
+              <Route
+                path="/print"
+                element={<ProtectedRoute element={<Printable />} />}
+              />
+            </Routes>
+          </BrowserRouter>
+        </div>
       </Suspense>
     </div>
   );

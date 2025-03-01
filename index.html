@@ -16,9 +16,71 @@
       href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
       rel="stylesheet"
     />
+    <style>
+      /* Spinning Animation */
+      #spinner-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+        z-index: 9999;
+      }
+
+      .spinner {
+        width: 50px;
+        height: 50px;
+        animation: spin 500ms linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Hide spinner when app is ready */
+      .hide {
+        opacity: 0;
+        visibility: hidden;
+      }
+    </style>
   </head>
   <body>
+    <div id="spinner-container">
+      <svg
+        width="50px"
+        height="50px"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        class="spinner"
+      >
+        <path
+          d="M20.0001 12C20.0001 13.3811 19.6425 14.7386 18.9623 15.9405C18.282 17.1424 17.3022 18.1477 16.1182 18.8587C14.9341 19.5696 13.5862 19.9619 12.2056 19.9974C10.825 20.0328 9.45873 19.7103 8.23975 19.0612"
+          stroke="rgb(255,255,255)"
+          stroke-width="3.55556"
+          stroke-linecap="round"
+        />
+      </svg>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      // Hide spinner when React has loaded
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          document.getElementById("spinner-container").classList.add("hide");
+        }, 500); // Small delay for smooth transition
+      });
+    </script>
   </body>
 </html>
