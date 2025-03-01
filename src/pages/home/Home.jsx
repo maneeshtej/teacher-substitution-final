@@ -1,3 +1,4 @@
+import { Sidebar } from "./components/Sidebar";
 import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import useTeachStore from "../../context/useTeachStore";
@@ -70,36 +71,11 @@ function Home() {
       ) : (
         <>
           {/* Sidebar */}
-          <div
-            className={`left-0 top-0 fixed h-[100dvh] w-[100vw] backdrop-blur-sm z-50 ${
-              !sidebarState ? "translate-x-[-100vw]" : ""
-            } transition-all duration-200 ease-in-out`}
-            onClick={() => {
-              setSidebarState(false);
-            }}
-          >
-            <div className="h-[100dvh] w-[min(80vw,300px)] bg-backgroundc">
-              <div className="flex flex-col gap-[4dvh] font-light text-2xl pl-[min(3vw,50px)]">
-                <span
-                  onClick={() => {
-                    setType("sent");
-                    setSidebarState(false);
-                  }}
-                >
-                  Sent
-                </span>
-                <span
-                  onClick={() => {
-                    setType("rec");
-                    setSidebarState(false);
-                  }}
-                >
-                  Recieved
-                </span>
-                <span onClick={() => {}}>Recycle Bin</span>
-              </div>
-            </div>
-          </div>
+          <Sidebar
+            sidebarState={sidebarState}
+            setSidebarState={setSidebarState}
+            setType={setType}
+          />
           {/* Header Section */}
           <div className="h-[2vh] flex"></div>
           <div className="flex lg:items-center w-[100%] items-end px-[20px] lg:fixed lg:top-0 bg-backgroundc lg:left-0 z-10 lg:border-b-[1px] border-[rgb(70,70,70)] lg:h-[10vh]">

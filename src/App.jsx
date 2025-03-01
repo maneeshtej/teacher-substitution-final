@@ -29,6 +29,7 @@ const SuccessfullSubstitution = lazy(() =>
   import("./pages/substitution/SuccessfullSubstitution")
 );
 const Printable = lazy(() => import("./pages/print/Printable"));
+const SettingsPage = lazy(() => import("./pages/settings/SettingsPage"));
 
 function App() {
   const { isOnline } = useNetworkStore();
@@ -102,6 +103,10 @@ function App() {
               <Route
                 path="/print"
                 element={<ProtectedRoute element={<Printable />} />}
+              />
+              <Route
+                path="/settings"
+                element={<ProtectedRoute element={<SettingsPage />} />}
               />
             </Routes>
           </BrowserRouter>
