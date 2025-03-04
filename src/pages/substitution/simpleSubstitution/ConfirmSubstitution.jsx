@@ -5,6 +5,7 @@ import { getAllTeachers } from "../../../../utils/fetchUtils";
 import { sendSubstitutions } from "../../../../utils/postUtils";
 import { Link, useNavigate } from "react-router-dom";
 import { checkDuplicateSubstitutions } from "../../../../utils/duplicateUtils";
+import { sendDraftSubstituions } from "../../../../utils/postUtils";
 
 function ConfirmSubstitution() {
   const { setteachersubstitutionstosend } = useTeachStore();
@@ -117,6 +118,33 @@ function ConfirmSubstitution() {
     navigate("/success", { state: { data: selectedDates } });
   };
 
+  const handleDraft = async () => {
+    const selectedDrafts = Object.keys(selectedDates)
+      .filter((key) => selectedDates[key]?.selected)
+      .reduce((acc, key) => ({ ...acc, [key]: selectedDates[key] }), {});
+
+    if (Object.keys(selectedDrafts).length === 0) {
+      console.warn("No substitutions selected to save as draft.");
+      return;
+    }
+
+    const result = await sendDraftSubstituions(selectedDrafts);
+
+    setSelectedDates((prevState) => {
+      const temp = { ...prevState };
+
+      Object.keys(temp).forEach((key) => {
+        if (temp[key]?.selected) {
+          delete temp[key]; // Remove sent drafts
+        }
+      });
+
+      return temp;
+    });
+
+    console.log(result);
+  };
+
   useEffect(() => {
     console.log(selectedDates);
   }, [selectedDates]);
@@ -193,7 +221,13 @@ function ConfirmSubstitution() {
       </div>
       <div className="h-[83dvh] px-[min(12vw,100px)] flex flex-col gap-[20px] overflow-y-scroll">
         <div className="w-[100%] flex flex-row justify-end gap-[20px] font-light">
-          <button>Draft</button>
+          <button
+            onClick={() => {
+              handleDraft();
+            }}
+          >
+            Draft
+          </button>
           <button
             className="text-red-300 transition-all duration-200 ease-in-out"
             style={{

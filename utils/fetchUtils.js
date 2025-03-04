@@ -187,6 +187,20 @@ export const getSubstitutionsSortedandFiltered = async ({
     query = query.eq("teacher_id", teacherID);
   } else if (type == "rec") {
     query = query.eq("sub_teacher_id", teacherID);
+  } else if (type == "draft") {
+    query = supabase
+      .from("Drafts")
+      .select(
+        "*, Classes:class_id(Subjects:subject_id(*)), Teachers:sub_teacher_id(name)"
+      )
+      .neq("deleted", "true");
+    query.eq("teacher_id", teacherID);
+  } else if (type == "deleted") {
+    query = supabase
+      .from("Deleted")
+      .select(
+        "*, Classes:class_id(Subjects:subject_id(*)), Teachers:sub_teacher_id(name)"
+      );
   }
 
   if (sortBy === "dateofPeriod") {

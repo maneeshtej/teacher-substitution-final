@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import useTeachStore from "../../../context/useTeachStore";
 import { useAnimation } from "../../../context/animation/AnimationManager";
 import { getAllTeachers } from "../../../../utils/fetchUtils";
-import { sendSubstitutions } from "../../../../utils/postUtils";
+import {
+  sendDraftSubstituions,
+  sendSubstitutions,
+} from "../../../../utils/postUtils";
 import { Link, useNavigate } from "react-router-dom";
 
 function ConfirmSubstitution2() {
@@ -47,7 +50,7 @@ function ConfirmSubstitution2() {
 
   const handleSend = async () => {
     const selectedSubstitutions = Object.keys(selectedDates)
-      .filter((key) => selectedDates[key]?.selected) // Get only selected substitutions
+      .filter((key) => selectedDates[key]?.selected)
       .reduce((acc, key) => ({ ...acc, [key]: selectedDates[key] }), {});
 
     if (Object.keys(selectedSubstitutions).length === 0) {
@@ -63,6 +66,33 @@ function ConfirmSubstitution2() {
       Object.keys(temp).forEach((key) => {
         if (temp[key]?.selected) {
           delete temp[key]; // Remove sent substitutions
+        }
+      });
+
+      return temp;
+    });
+
+    console.log(result);
+  };
+
+  const handleDraft = async () => {
+    const selectedDrafts = Object.keys(selectedDates)
+      .filter((key) => selectedDates[key]?.selected)
+      .reduce((acc, key) => ({ ...acc, [key]: selectedDates[key] }), {});
+
+    if (Object.keys(selectedDrafts).length === 0) {
+      console.warn("No substitutions selected to save as draft.");
+      return;
+    }
+
+    const result = await sendDraftSubstituions(selectedDrafts);
+
+    setSelectedDates((prevState) => {
+      const temp = { ...prevState };
+
+      Object.keys(temp).forEach((key) => {
+        if (temp[key]?.selected) {
+          delete temp[key]; // Remove sent drafts
         }
       });
 
@@ -148,7 +178,13 @@ function ConfirmSubstitution2() {
       </div>
       <div className="h-[83dvh] px-[min(12vw,100px)] flex flex-col gap-[20px] overflow-y-scroll">
         <div className="w-[100%] flex flex-row justify-end gap-[20px] font-light">
-          <button>Draft</button>
+          <button
+            onClick={() => {
+              handleDraft();
+            }}
+          >
+            Draft
+          </button>
           <button
             className="text-red-300 transition-all duration-200 ease-in-out"
             style={{

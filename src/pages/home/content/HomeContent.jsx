@@ -75,7 +75,7 @@ function HomeContent({ type }) {
       return;
     }
 
-    setPageLoad(true);
+    // setPageLoad(true);
 
     try {
       const { removeSubstitutions } = await import(

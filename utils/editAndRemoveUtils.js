@@ -4,22 +4,29 @@ import { supabase } from "./supabase";
 
 export const removeSubstitutions = async (sub_ids) => {
   if (!sub_ids || sub_ids.length === 0) {
-    console.error("Error: sub_ids not provided");
-    return { data: null, error: "Substitution IDs not provided" };
+    console.error("❌ Error: No substitution IDs provided for deletion");
+    return { data: null, error: "No substitution IDs provided" };
   }
 
-  try {
-    const { data, error } = await supabase
-      .from("Substitution")
-      .update({ deleted: true })
-      .in("sub_id", sub_ids);
+  const { data, error } = await supabase
+    .from("Substitution")
+    .select("*")
+    .in("sub_id", sub_ids);
 
-    if (error) throw error;
+  if (data) {
+    const { data: data2, error } = await supabase
+      .from("Deleted")
+      .insert(data.map(({ sub_id, ...rest }) => rest));
+    console.log(data2, error);
 
-    return { data, error: null };
-  } catch (error) {
-    console.error("Error deleting substitutions:", error);
-    return { data: null, error };
+    if (!error) {
+      const { data: deletedData, error } = await supabase
+        .from("Substitution")
+        .delete()
+        .in("sub_id", sub_ids);
+
+      console.log(deletedData, error);
+    }
   }
 };
 

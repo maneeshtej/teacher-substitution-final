@@ -84,3 +84,25 @@ const logError = (message, error = null) => {
   console.error(message, error || "");
   return { data: null, error: message };
 };
+
+export const sendDraftSubstituions = async (substitutions) => {
+  if (!substitutions) {
+    console.error("error : no Substitutions");
+  }
+
+  try {
+    const groupId = uuidv4();
+    const subsToSend = await processSubstitutions(substitutions, groupId);
+    const { data: result, error } = await supabase
+      .from("Drafts")
+      .insert(subsToSend);
+
+    if (error) return logError("Supabase Insert Error:", error);
+
+    console.log("Successfully inserted into Supabase:", result);
+    return { data: "success", error: null };
+  } catch (err) {
+    return logError("Unexpected error:", err.message || "Unknown error");
+  }
+  console.log(subsToSend);
+};

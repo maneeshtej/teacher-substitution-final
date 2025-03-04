@@ -61,7 +61,7 @@ export function Sidebar({ sidebarState, setSidebarState, setType }) {
                 setType("sent");
                 setSidebarState(false);
               }}
-              className="cursor-pointer"
+              className={`cursor-pointer`}
             >
               Sent
             </span>
@@ -70,14 +70,26 @@ export function Sidebar({ sidebarState, setSidebarState, setType }) {
                 setType("rec");
                 setSidebarState(false);
               }}
-              className="cursor-pointer"
+              className={`cursor-pointer`}
             >
               Recieved
             </span>
-            <span onClick={() => {}} className="cursor-pointer">
+            <span
+              onClick={() => {
+                setType("draft");
+                setSidebarState(false);
+              }}
+              className={`cursor-pointer`}
+            >
               Draft
             </span>
-            <span onClick={() => {}} className="cursor-pointer">
+            <span
+              onClick={() => {
+                setType("deleted");
+                setSidebarState(false);
+              }}
+              className="cursor-pointer"
+            >
               Recycle Bin
             </span>
           </div>
