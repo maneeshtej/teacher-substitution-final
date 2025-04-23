@@ -9,6 +9,8 @@
 
   --color-backgroundc: rgb(0, 0, 0);
   --color-textc: rgb(255, 255, 255);
+  --color-borderc: rgb(150, 150, 150);
+
 
   --animate-floatup: floatUp ease-in-out 500ms;
 

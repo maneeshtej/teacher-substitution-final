@@ -30,6 +30,7 @@ const SuccessfullSubstitution = lazy(() =>
 );
 const Printable = lazy(() => import("./pages/print/Printable"));
 const SettingsPage = lazy(() => import("./pages/settings/SettingsPage"));
+const StarterPage = lazy(() => import("./pages/login/StarterPage"));
 
 function App() {
   const { isOnline } = useNetworkStore();
@@ -57,7 +58,8 @@ function App() {
         <div className="bg-backgroundc">
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Login />} />
+              <Route path="/" element={<StarterPage/>} />
+              <Route path="/login" element={<Login />} />
               <Route
                 path="/home"
                 element={<ProtectedRoute element={<Home />} />}
