@@ -31,6 +31,7 @@ const SuccessfullSubstitution = lazy(() =>
 const Printable = lazy(() => import("./pages/print/Printable"));
 const SettingsPage = lazy(() => import("./pages/settings/SettingsPage"));
 const StarterPage = lazy(() => import("./pages/login/StarterPage"));
+const MainSubstitutionPage = lazy(() => import("./pages/substittutions/MainSubstitutionPage"))
 
 function App() {
   const { isOnline } = useNetworkStore();
@@ -110,6 +111,7 @@ function App() {
                 path="/settings"
                 element={<ProtectedRoute element={<SettingsPage />} />}
               />
+              <Route path="/mainsub" element={<ProtectedRoute element={<MainSubstitutionPage />} />} />
             </Routes>
           </BrowserRouter>
         </div>
