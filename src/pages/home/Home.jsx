@@ -146,7 +146,7 @@ function Home() {
                 className="flex flex-col justify-between xl:flex-row h-[100%] items-center gap-[6px] xl:gap-[15px] xl:items-start xl:w-[50%] cursor-pointer"
                 onClick={() => {
                   setPageLoad(true);
-                  navigate("/selecttype");
+                  navigate("/mainsub");
                 }}
               >
                 <PlusIconSvg />
