@@ -1,10 +1,11 @@
 import React, { lazy, Suspense, useEffect, useState } from "react";
-import { BackLogo } from "../../components/Logos"; // Component for the back button icon
+import { BackLogo, HelpLogo } from "../../components/Logos"; // Component for the back button icon
 import TypeSelector from "./components/TypeSelector"; // Component to select substitution type (Give/Take/Swap)
 import useTeachStore from "../../context/useTeachStore"; // Zustand store for teacher-related data (like teacher ID)
 import { create } from "zustand"; // Zustand library for state management
 import { persist } from "zustand/middleware"; // Zustand middleware for persisting state (e.g., to localStorage)
 import { useNavigate } from "react-router-dom"; // Hook for programmatic navigation
+import HelpPage from "./components/HelpPage";
 
 // Lazily load the CalenderClassSelector component for better initial load performance
 const CalenderClassSelector = lazy(() =>
@@ -49,6 +50,8 @@ function MainSubstitutionPage() {
   const [allowSteps, setAllowSteps] = useState(
     useSubStore((state) => state.allowSteps)
   );
+
+  const [helpToggle, setHelpToggle] = useState(false);
 
   // Hook for navigation
   const navigate = useNavigate();
@@ -103,6 +106,7 @@ function MainSubstitutionPage() {
         type={typeState.type}
         setType={updateType}
       />
+      <HelpPage visible={helpToggle} />
 
       {/* Header section with back button and title */}
       <div className="h-[10dvh] w-[100%] flex items-center gap-[10px] px-[min(3vw,50px)] cursor-pointer">
@@ -120,6 +124,9 @@ function MainSubstitutionPage() {
         <h1 className="text-heading font-bold lg:font-normal">
           Add Substitutions
         </h1>
+        <div className="ml-auto" onClick={() => setHelpToggle(true)}>
+          <HelpLogo />
+        </div>
       </div>
 
       {/* Main content area, scrollable */}
