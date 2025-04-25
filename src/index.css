@@ -8,8 +8,14 @@
   --font-anton: "Anton", sans-serif;
 
   --color-backgroundc: rgb(30, 30, 30);
+  --color-backgroundh: rgb(50, 50, 50);
   --color-textc: rgb(255, 255, 255);
   --color-borderc: rgb(150, 150, 150);
+
+  --text-heading: min(2.5rem, 7vw);
+  --text-subheading: min(1rem, 5vw);
+  --text-small: 10px
+  
 
 
   --animate-floatup: floatUp ease-in-out 500ms;

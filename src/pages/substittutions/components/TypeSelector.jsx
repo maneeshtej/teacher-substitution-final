@@ -16,7 +16,7 @@ function TypeSelector({ visible, type, setType }) {
           key={i}
           className={`
             p-[min(3vw,20px)] w-[90%] md:w-[40%] rounded-md flex items-center justify-center cursor-pointer
-            ${type === i ? 'bg-textc text-backgroundc' : 'bg-backgroundc text-textc border border-borderc border-[0.5px]'}
+            ${type === i ? 'bg-textc text-backgroundc' : 'bg-backgroundc text-textc border-borderc border-[0.5px]'}
           `}
           onClick={() => setType(i)}
         >

@@ -137,6 +137,14 @@ export const getTimetableGrouped = async (ID) => {
       return acc;
     }, {});
 
+    const flattenedData = [];
+
+    Object.keys(groupedData).forEach((day) => {
+      flattenedData.push(groupedData[day]);
+    })
+
+    // console.log(flattenedData);
+
     return { data: groupedData, error: null };
   } catch (error) {
     console.error("Error: ", error);
