@@ -11,9 +11,6 @@ import { useNavigate } from "react-router-dom"; // Hook for programmatic navigat
 import HelpPage from "./components/HelpPage";
 
 // Lazily load the CalenderClassSelector component for better initial load performance
-const CalenderClassSelector = lazy(() =>
-  import("./components/CalenderClassSelector")
-);
 
 // Create a Zustand store specifically for substitution page state, persisted in localStorage
 const useSubStore = create(
@@ -160,11 +157,13 @@ function MainSubstitutionPage() {
         <div className="h-[min(5vw,20px)]"></div>
 
         {typeState?.type === 0 && (
-          <GiveClasses
-            teacherSubstitutionsToSend={teacherSubstitutionsToSend}
-            setteachersubstitutionstosend={setteachersubstitutionstosend}
-            allowSteps={allowSteps}
-          />
+          <Suspense fallback={<div>Loading</div>}>
+            <GiveClasses
+              teacherSubstitutionsToSend={teacherSubstitutionsToSend}
+              setteachersubstitutionstosend={setteachersubstitutionstosend}
+              allowSteps={allowSteps}
+            />
+          </Suspense>
         )}
 
         {/* Footer section with a gradient overlay and Send button */}

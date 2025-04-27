@@ -143,6 +143,7 @@ function CalenderClassSelector({
         dateNumber: selectedDate.dateNumber,
         month: selectedDate.month,
         day: selectedDate.day,
+        teacher_id: teacherID,
       };
     }
 

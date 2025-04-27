@@ -1,8 +1,12 @@
-import React from "react";
+import React, { lazy } from "react";
 import { SubstitutionsDisplay } from "./components/SubstitutionsDisplay";
 import { Suspense } from "react";
-import CalenderClassSelector from "./components/CalenderClassSelector";
 import { SubstitutionTeacherSelector } from "./components/SubstitutionTeacherSelector";
+
+const CalenderClassSelector = lazy(() =>
+  import("./components/CalenderClassSelector")
+);
+
 export function GiveClasses({
   teacherSubstitutionsToSend,
   setteachersubstitutionstosend,
@@ -51,6 +55,7 @@ export function GiveClasses({
         </h1>
         <SubstitutionTeacherSelector
           teacherSubstitutionsToSend={teacherSubstitutionsToSend}
+          setteachersubstitutionstosend={setteachersubstitutionstosend}
         />
       </div>
     </>
