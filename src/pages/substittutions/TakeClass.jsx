@@ -123,33 +123,42 @@ function TakeClass({
         Object.keys(teacherSubstitutionsToSend).length > 0 ? (
           Object.keys(teacherSubstitutionsToSend).map((subs, index) => {
             return (
-              <SubstitutionInfo
-                info={teacherSubstitutionsToSend[subs]}
-                component={
-                  <div
-                    className="p-[min(3vw,50px)] flex bg-textc text-backgroundc rounded-md w-[clamp(300px,100%,700px)]"
-                    key={index}
-                  >
-                    <div className=" rounded-md flex flex-col items-start cursor-pointer flex-2/5">
-                      <h1>
-                        {teacherSubstitutionsToSend[subs]["subject_name"]}
-                      </h1>
-                      <div className="text-[min(1rem,10px)] flex gap-[5px]">
-                        <span>
-                          {teacherSubstitutionsToSend[subs]["dateNumber"]}
-                        </span>
-                        <span>{teacherSubstitutionsToSend[subs]["month"]}</span>
+              <div>
+                <SubstitutionInfo
+                  info={teacherSubstitutionsToSend[subs]}
+                  component={
+                    <div
+                      className="p-[min(3vw,50px)] flex bg-textc text-backgroundc rounded-md w-[clamp(300px,100%,700px)]"
+                      key={index}
+                    >
+                      <div className=" rounded-md flex flex-col items-start cursor-pointer flex-2/5">
+                        <h1>
+                          {teacherSubstitutionsToSend[subs]["subject_name"]}
+                        </h1>
+                        <div className="text-[min(1rem,10px)] flex gap-[5px]">
+                          <span>
+                            {teacherSubstitutionsToSend[subs]["dateNumber"]}
+                          </span>
+                          <span>
+                            {teacherSubstitutionsToSend[subs]["month"]}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                    {teacherSubstitutionsToSend[subs].error ? (
-                      <div className="p-[min(2vw,20px)] text-[min(1rem,10px)]">
-                        <span className="text-red-400">(i) </span>
-                        {teacherSubstitutionsToSend[subs]?.error}
-                      </div>
-                    ) : null}
+                  }
+                />
+                {teacherSubstitutionsToSend[subs].error ? (
+                  <div className="p-[min(2vw,20px)] text-[min(1rem,10px)]">
+                    <span className="text-red-400">(i) </span>
+                    {teacherSubstitutionsToSend[subs]?.error}
                   </div>
-                }
-              />
+                ) : teacherSubstitutionsToSend[subs]?.duplicate == true ? (
+                  <div className="p-[min(2vw,20px)] text-[min(1rem,10px)]">
+                    <span className="text-red-400">(i) </span>
+                    Duplicate
+                  </div>
+                ) : null}
+              </div>
             );
           })
         ) : (

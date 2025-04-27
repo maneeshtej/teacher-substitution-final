@@ -119,6 +119,11 @@ export function SubstitutionTeacherSelector({
                     <span className="text-red-400">(i) </span>
                     {teacherSubstitutionsToSend[subs]?.error}
                   </div>
+                ) : teacherSubstitutionsToSend[subs]?.deleted == true ? (
+                  <div className="p-[min(2vw,20px)] text-[min(1rem,10px)]">
+                    <span className="text-red-400">(i) </span>
+                    Duplicate
+                  </div>
                 ) : null}
               </div>
             );

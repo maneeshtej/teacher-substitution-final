@@ -12,7 +12,6 @@ export const checkDuplicateSubstitutions = async (substitutions) => {
       .select("sub_id")
       .eq("class_id", sub.class_id)
       .eq("date_of_period", sub.date_of_period)
-      .eq("deleted", false)
       .limit(1);
 
     if (error) {

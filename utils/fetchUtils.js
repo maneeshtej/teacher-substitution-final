@@ -141,7 +141,7 @@ export const getTimetableGrouped = async (ID) => {
 
     Object.keys(groupedData).forEach((day) => {
       flattenedData.push(groupedData[day]);
-    })
+    });
 
     // console.log(flattenedData);
 
@@ -188,8 +188,7 @@ export const getSubstitutionsSortedandFiltered = async ({
     .from("Substitution")
     .select(
       "*, Classes:class_id(Subjects:subject_id(*)), Teachers:sub_teacher_id(name)"
-    )
-    .neq("deleted", "true");
+    );
 
   if (type == "sent" || type == null || type == undefined) {
     query = query.eq("teacher_id", teacherID);
@@ -200,15 +199,8 @@ export const getSubstitutionsSortedandFiltered = async ({
       .from("Drafts")
       .select(
         "*, Classes:class_id(Subjects:subject_id(*)), Teachers:sub_teacher_id(name)"
-      )
-      .neq("deleted", "true");
-    query.eq("teacher_id", teacherID);
-  } else if (type == "deleted") {
-    query = supabase
-      .from("Deleted")
-      .select(
-        "*, Classes:class_id(Subjects:subject_id(*)), Teachers:sub_teacher_id(name)"
       );
+    query.eq("teacher_id", teacherID);
   }
 
   if (sortBy === "dateofPeriod") {
@@ -224,6 +216,10 @@ export const getSubstitutionsSortedandFiltered = async ({
   }
 
   const { data, error } = await query;
+  console.log(teacherID, sort, sortBy, type);
+
+  console.log("fetched query : ", data);
+  console.error("error is", error);
 
   if (error) {
     console.error("error : ", error);
@@ -246,7 +242,6 @@ export const getSubstitutionsSortedandFiltered = async ({
       subject_id: item.Classes?.Subjects?.subject_id || null,
       subject_name: item.Classes?.Subjects?.subject_name || null,
       sub_teacher_name: item.Teachers?.name || null,
-      deleted: item.deleted,
     }));
 
     if (flattenedData) {

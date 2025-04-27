@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom"; // Hook for programmatic navigat
 import HelpPage from "./components/HelpPage";
 import TakeClass from "./TakeClass";
 import {
+  insertSubstitutions,
   processSend,
   sendSubstitutions,
   testSupabaseEdge,
@@ -130,6 +131,45 @@ function MainSubstitutionPage() {
     return isValid;
   };
 
+  const handleCheckSubstitutions = async () => {
+    if (!checkValidity()) {
+      return;
+    }
+
+    const processedSubstitutions = processSend(teacherSubstitutionsToSend);
+    setFinalSubstitutions(processedSubstitutions);
+
+    const duplicatesResult = await checkDuplicateSubstitutions(
+      processedSubstitutions
+    );
+    console.log(duplicatesResult);
+
+    const tempSubs = { ...teacherSubstitutionsToSend };
+
+    Object.keys(teacherSubstitutionsToSend).map((sub, index) => {
+      tempSubs[sub] = {
+        ...tempSubs[sub],
+        duplicate: duplicatesResult.duplicates[index],
+      };
+      setteachersubstitutionstosend(tempSubs);
+
+      console.log(duplicatesResult.duplicates[index]);
+    });
+
+    if (duplicatesResult.value === false) {
+      const { data, error } = await insertSubstitutions(finalSubstitutions);
+
+      if (error) {
+        console.error(error);
+      }
+
+      if (data) {
+        setteachersubstitutionstosend({});
+        console.log("success", data);
+      }
+    }
+  };
+
   // Effect to synchronize local typeState with the Zustand store whenever local state changes
   useEffect(() => {
     settypestate(typeState);
@@ -225,31 +265,6 @@ function MainSubstitutionPage() {
           {/* Send button (functionality likely needs to be added to onClick) */}
           <span
             onClick={() => {
-              const handleCheckSubstitutions = async () => {
-                if (checkValidity()) {
-                  const processedSubstitutions = processSend(
-                    teacherSubstitutionsToSend
-                  );
-                  setFinalSubstitutions(processedSubstitutions);
-
-                  // Ensure finalSubstitutions is fully updated before checking duplicates
-                  const duplicatesResult = await checkDuplicateSubstitutions(
-                    processedSubstitutions
-                  );
-                  console.log(duplicatesResult);
-
-                  if (duplicatesResult.value === false) {
-                    const { data, error } = await testSupabaseEdge(
-                      finalSubstitutions
-                    );
-
-                    if (error == null) {
-                      setteachersubstitutionstosend({});
-                    }
-                  }
-                }
-              };
-
               handleCheckSubstitutions();
 
               // Call handleCheckSubstitutions where appropriate

@@ -1,3 +1,4 @@
+import { data } from "react-router-dom";
 import { logSubstitutions } from "./recentFunctionUtils";
 import { supabase } from "./supabase";
 
@@ -17,7 +18,6 @@ const convertSubstitution = (data) => {
     state: "incomplete",
     reason: "None",
     re_sub: false,
-    deleted: false,
   };
 };
 
@@ -113,6 +113,24 @@ export const processSend = (teacherSubstitutionsToSend) => {
 //   await logSubstitutions("ADD", validSubstitutions[0].teacher_id, classIds);
 //   return { data: insertedData, error: null };
 // };
+
+export const insertSubstitutions = async (subs) => {
+  if (!subs) {
+    return { data: null, error: "no Subs" };
+  }
+
+  const { data, error } = await supabase.rpc("insert_values", {
+    substitutions: subs, // Pass the array directly
+  });
+
+  if (error) {
+    console.error("Insert Error:", error);
+    return { data: null, error };
+  }
+
+  console.log("Insert successful:", data);
+  return { data: "success", error: null };
+};
 
 export const sendSubstitutions = async (substitutionData) => {
   if (!substitutionData) {
