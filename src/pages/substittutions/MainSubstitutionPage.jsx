@@ -239,16 +239,13 @@ function MainSubstitutionPage() {
                   console.log(duplicatesResult);
 
                   if (duplicatesResult.value === false) {
-                    // const { data, error } = await sendSubstitutions(
-                    //   processedSubstitutions
-                    // );
-                    // if (error) {
-                    //   console.error("Error sending substitutions:", error);
-                    // } else {
-                    //   console.log("Substitutions sent successfully:", data);
-                    // }
+                    const { data, error } = await testSupabaseEdge(
+                      finalSubstitutions
+                    );
 
-                    console.log(await testSupabaseEdge(finalSubstitutions));
+                    if (error == null) {
+                      setteachersubstitutionstosend({});
+                    }
                   }
                 }
               };

@@ -147,13 +147,13 @@ function CalenderClassSelector({
         dateNumber: selectedDate.dateNumber,
         month: selectedDate.month,
         day: selectedDate.day,
-        teacher_id: teacherID,
+        teacher_id: parseInt(teacherID),
         teacher_name: teacherName,
       };
 
       if (subTeacherID && subTeacherName) {
         // Add substitute teacher details
-        updatedSubstitutions[newKey].sub_teacher_id = subTeacherID;
+        updatedSubstitutions[newKey].sub_teacher_id = parseInt(subTeacherID);
         updatedSubstitutions[newKey].sub_teacher_name = subTeacherName;
       }
     }
