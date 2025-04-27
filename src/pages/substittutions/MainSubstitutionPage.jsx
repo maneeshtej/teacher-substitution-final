@@ -1,3 +1,6 @@
+import { GiveClasses } from "./GiveClasses";
+import { SubstitutionsDisplay } from "./components/SubstitutionsDisplay";
+import { SubstitutionTeacherSelector } from "./components/SubstitutionTeacherSelector";
 import React, { lazy, Suspense, useEffect, useState } from "react";
 import { BackLogo, HelpLogo } from "../../components/Logos"; // Component for the back button icon
 import TypeSelector from "./components/TypeSelector"; // Component to select substitution type (Give/Take/Swap)
@@ -133,55 +136,36 @@ function MainSubstitutionPage() {
       <div className="h-[90dvh] w-[100%] p-[min(3vw,50px)] overflow-scroll">
         {/* Section 1: Select Substitution Type */}
         <div className="px-[min(3vw,50px)]">
-          <h1 className="text-subheading font-bold lg:font-normal">
-            Select Type
+          <h1 className="text-subheading font-bold lg:font-normal w-full border-b-2 border-borderc py-[min(2vw,30px)]">
+            1. Select Type
           </h1>
           <div className="h-[2vh]"></div>
           {/* Clickable area to show the selected type or prompt selection */}
-          <span
-            className="flex w-[clamp(300px,100%,700px)] bg-textc text-backgroundc p-[min(3vw,30px)] rounded-md cursor-pointer"
-            onClick={toggleTypeSelector} // Opens the TypeSelector
-          >
-            {/* Display selected type text */}
-            {typeState.type == 0
-              ? "Give Class"
-              : typeState.type == 1
-              ? "Take Class"
-              : typeState.type == 2
-              ? "Swap Class"
-              : "Tap to select"}
-          </span>
+          <div className="pl-[min(3vw,50px)]">
+            <span
+              className="flex w-[clamp(300px,100%,700px)] bg-textc text-backgroundc p-[min(3vw,30px)] rounded-md cursor-pointer"
+              onClick={toggleTypeSelector} // Opens the TypeSelector
+            >
+              {/* Display selected type text */}
+              {typeState.type == 0
+                ? "Give Class"
+                : typeState.type == 1
+                ? "Take Class"
+                : typeState.type == 2
+                ? "Swap Class"
+                : "Tap to select"}
+            </span>
+          </div>
         </div>
         <div className="h-[min(5vw,20px)]"></div>
 
-        {/* Section 2: Select Classes (conditionally enabled) */}
-        <div
-          className={`${
-            allowSteps.step2 == false // Apply opacity and disable interaction if step 2 is not allowed
-              ? "opacity-30 pointer-events-none"
-              : "opacity-100"
-          } px-[min(3vw,50px)] z-0`}
-        >
-          <h1 className="text-subheading font-bold lg:font-normal">
-            Select Classes
-          </h1>
-          <div className="h-[2vh]"></div>
-          {/* Use Suspense for lazy loading the CalenderClassSelector */}
-          <Suspense
-            fallback={
-              // Display a loading placeholder while the component loads
-              <div
-                className={`h-[100dvh] w-[100%] bg-backgroundh rounded-md animate-pulse`}
-              ></div>
-            }
-          >
-            {/* Render the calendar component, passing down state and setters */}
-            <CalenderClassSelector
-              teacherSubstitutionsToSend={teacherSubstitutionsToSend}
-              setteachersubstitutionstosend={setteachersubstitutionstosend}
-            />
-          </Suspense>
-        </div>
+        {typeState?.type === 0 && (
+          <GiveClasses
+            teacherSubstitutionsToSend={teacherSubstitutionsToSend}
+            setteachersubstitutionstosend={setteachersubstitutionstosend}
+            allowSteps={allowSteps}
+          />
+        )}
 
         {/* Footer section with a gradient overlay and Send button */}
         <div className="h-[10dvh] w-[100%] flex justify-center items-center bg-gradient-to-b from-[rgba(30,30,30,0)] via-[rgba(30,30,30,0.4)] to-[rgba(30,30,30,1)]">

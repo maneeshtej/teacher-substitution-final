@@ -137,7 +137,13 @@ function CalenderClassSelector({
       delete updatedSubstitutions[newKey];
     } else {
       // Else, add it
-      updatedSubstitutions[newKey] = period;
+      updatedSubstitutions[newKey] = {
+        ...period,
+        date: selectedDate,
+        dateNumber: selectedDate.dateNumber,
+        month: selectedDate.month,
+        day: selectedDate.day,
+      };
     }
 
     setteachersubstitutionstosend(updatedSubstitutions);
@@ -216,7 +222,7 @@ function CalenderClassSelector({
 
       {!loading ? (
         <>
-          <div className="w-[clamp(300px,100%,700px)] border-borderc border-t-1 flex flex-row p-[min(3vw,30px)] h-[70dvh] overflow-scroll">
+          <div className="w-[clamp(300px,100%,700px)] flex flex-row p-[min(3vw,30px)] h-[70dvh] overflow-scroll">
             <div className="flex flex-col gap-[10px] items-center justify-start py-[min(3vw,50px)]">
               {dates.map((date, index) => {
                 // console.log(date);
