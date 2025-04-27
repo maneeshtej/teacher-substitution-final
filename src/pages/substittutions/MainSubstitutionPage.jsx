@@ -10,6 +10,12 @@ import { persist } from "zustand/middleware"; // Zustand middleware for persisti
 import { useNavigate } from "react-router-dom"; // Hook for programmatic navigation
 import HelpPage from "./components/HelpPage";
 import TakeClass from "./TakeClass";
+import {
+  processSend,
+  sendSubstitutions,
+  testSupabaseEdge,
+} from "../../../utils/postUtils";
+import { checkDuplicateSubstitutions } from "../../../utils/duplicateUtils";
 
 // Lazily load the CalenderClassSelector component for better initial load performance
 
@@ -64,6 +70,8 @@ function MainSubstitutionPage() {
   const teacherSubstitutionsToSend = useTeachStore(
     (state) => state.teachersubstitutionstosend // Get the currently selected substitutions from the global store
   );
+  const [finalSubstitutions, setFinalSubstitutions] = useState([]);
+  const [allowSend, setAllowSend] = useState(false);
 
   // Function called when a substitution type is selected in the TypeSelector
   const updateType = (type) => {
@@ -89,6 +97,39 @@ function MainSubstitutionPage() {
     }));
   };
 
+  const checkValidity = () => {
+    let isValid = true;
+
+    const temp = { ...teacherSubstitutionsToSend }; // copy to edit
+
+    Object.keys(temp).forEach((key) => {
+      const data = temp[key];
+      let error = "";
+
+      if (!data.teacher_id) error = "Teacher ID missing";
+      else if (!data.teacher_name) error = "Teacher Name missing";
+      else if (!data.sub_teacher_id) error = "Sub Teacher ID missing";
+      else if (!data.sub_teacher_name) error = "Sub Teacher Name missing";
+      else if (!data.class_id) error = "Class ID missing";
+      else if (!data.subject_id) error = "Subject ID missing";
+      else if (!data.start_time) error = "Start Time missing";
+      else if (!data.end_time) error = "End Time missing";
+      else if (!data.date?.date) error = "Date missing";
+
+      if (error) {
+        isValid = false;
+        temp[key].error = error; // update that particular entry with error
+      } else {
+        delete temp[key].error; // no error => remove if already existed
+      }
+    });
+
+    // Update teacherSubstitutionsToSend with new errors
+    setteachersubstitutionstosend(temp);
+
+    return isValid;
+  };
+
   // Effect to synchronize local typeState with the Zustand store whenever local state changes
   useEffect(() => {
     settypestate(typeState);
@@ -98,6 +139,10 @@ function MainSubstitutionPage() {
   useEffect(() => {
     setallowsteps(allowSteps);
   }, [allowSteps, setallowsteps]); // Added setallowsteps to dependency array
+
+  useEffect(() => {
+    console.log(finalSubstitutions);
+  }, [finalSubstitutions]);
 
   return (
     // Main container div covering the full screen
@@ -178,7 +223,42 @@ function MainSubstitutionPage() {
         {/* Footer section with a gradient overlay and Send button */}
         <div className="h-[10dvh] w-[100%] flex justify-center items-center bg-gradient-to-b from-[rgba(30,30,30,0)] via-[rgba(30,30,30,0.4)] to-[rgba(30,30,30,1)]">
           {/* Send button (functionality likely needs to be added to onClick) */}
-          <span className="bg-textc flex items-center justify-center text-backgroundc font-bold tracking-wide p-[min(3vw,20px)] rounded-md cursor-pointer h-[80%] w-[min(60%,300px)]">
+          <span
+            onClick={() => {
+              const handleCheckSubstitutions = async () => {
+                if (checkValidity()) {
+                  const processedSubstitutions = processSend(
+                    teacherSubstitutionsToSend
+                  );
+                  setFinalSubstitutions(processedSubstitutions);
+
+                  // Ensure finalSubstitutions is fully updated before checking duplicates
+                  const duplicatesResult = await checkDuplicateSubstitutions(
+                    processedSubstitutions
+                  );
+                  console.log(duplicatesResult);
+
+                  if (duplicatesResult.value === false) {
+                    // const { data, error } = await sendSubstitutions(
+                    //   processedSubstitutions
+                    // );
+                    // if (error) {
+                    //   console.error("Error sending substitutions:", error);
+                    // } else {
+                    //   console.log("Substitutions sent successfully:", data);
+                    // }
+
+                    console.log(await testSupabaseEdge(finalSubstitutions));
+                  }
+                }
+              };
+
+              handleCheckSubstitutions();
+
+              // Call handleCheckSubstitutions where appropriate
+            }}
+            className="bg-textc flex items-center justify-center text-backgroundc font-bold tracking-wide p-[min(3vw,20px)] rounded-md cursor-pointer h-[80%] w-[min(60%,300px)]"
+          >
             Send
           </span>
         </div>

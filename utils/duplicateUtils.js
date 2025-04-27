@@ -1,7 +1,8 @@
 import { supabase } from "./supabase";
 
 export const checkDuplicateSubstitutions = async (substitutions) => {
-  if (!substitutions || Object.keys(substitutions).length === 0) return {};
+  if (!substitutions || Object.keys(substitutions).length === 0)
+    return { value: false, duplicates: {} };
 
   const queries = Object.keys(substitutions).map(async (key) => {
     const sub = substitutions[key];
@@ -24,10 +25,16 @@ export const checkDuplicateSubstitutions = async (substitutions) => {
 
   const results = await Promise.all(queries);
 
-  console.log(results);
-
-  return results.reduce((acc, { key, duplicate }) => {
+  // Determine the final value based on whether any substitution is a duplicate
+  const duplicates = results.reduce((acc, { key, duplicate }) => {
     acc[key] = duplicate;
     return acc;
   }, {});
+
+  // Final value is true if there is any duplicate, otherwise false
+  const finalValue = Object.values(duplicates).includes(true);
+
+  console.log(finalValue, duplicates);
+
+  return { value: finalValue, duplicates };
 };

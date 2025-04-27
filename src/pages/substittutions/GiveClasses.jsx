@@ -14,6 +14,7 @@ export function GiveClasses({
   allowSteps,
 }) {
   const teacherID = useTeachStore((state) => state.teacherid);
+  const teacherName = useTeachStore((state) => state.teachername);
 
   useEffect(() => {
     console.log(teacherID);
@@ -52,6 +53,7 @@ export function GiveClasses({
             teacherSubstitutionsToSend={teacherSubstitutionsToSend}
             setteachersubstitutionstosend={setteachersubstitutionstosend}
             teacherID={teacherID}
+            teacherName={teacherName}
           />
         </Suspense>
       </div>
