@@ -1,7 +1,8 @@
-import React, { lazy } from "react";
+import React, { lazy, useDebugValue, useEffect } from "react";
 import { SubstitutionsDisplay } from "./components/SubstitutionsDisplay";
 import { Suspense } from "react";
 import { SubstitutionTeacherSelector } from "./components/SubstitutionTeacherSelector";
+import useTeachStore from "../../context/useTeachStore";
 
 const CalenderClassSelector = lazy(() =>
   import("./components/CalenderClassSelector")
@@ -12,6 +13,12 @@ export function GiveClasses({
   setteachersubstitutionstosend,
   allowSteps,
 }) {
+  const teacherID = useTeachStore((state) => state.teacherid);
+
+  useEffect(() => {
+    console.log(teacherID);
+  }, [teacherID]);
+
   return (
     <>
       {/* Section 2: Select Classes (conditionally enabled) */}
@@ -44,6 +51,7 @@ export function GiveClasses({
           <CalenderClassSelector
             teacherSubstitutionsToSend={teacherSubstitutionsToSend}
             setteachersubstitutionstosend={setteachersubstitutionstosend}
+            teacherID={teacherID}
           />
         </Suspense>
       </div>

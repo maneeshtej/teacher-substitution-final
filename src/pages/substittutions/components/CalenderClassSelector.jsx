@@ -8,9 +8,10 @@ import useTeachStore from "../../../context/useTeachStore";
 function CalenderClassSelector({
   teacherSubstitutionsToSend,
   setteachersubstitutionstosend,
+  teacherID,
 }) {
+  // console.log("teacher id  is ", teacherID);
   const [loading, setLoading] = useState(false);
-  const teacherID = useTeachStore((state) => state.teacherid);
   const weeks = useMemo(
     () => [
       "Sunday",
@@ -199,12 +200,21 @@ function CalenderClassSelector({
   }, [teacherTimeTable, dates]);
 
   useEffect(() => {
-    console.log(teacherSubstitutionsToSend);
+    // console.log(teacherSubstitutionsToSend);
   }, [teacherSubstitutionsToSend]);
 
   useEffect(() => {
     // console.log(dates);
   }, [dates]);
+
+  if (!teacherID) {
+    console.log("mo teacher ID");
+    return (
+      <div className="w-[clamp(300px,100%,700px)] flex flex-row p-[min(5vw,30px)] h-[70dvh] overflow-scroll justify-center font-light text-borderc">
+        Select a teacher Name
+      </div>
+    );
+  }
 
   return (
     <div>

@@ -9,6 +9,7 @@ import { create } from "zustand"; // Zustand library for state management
 import { persist } from "zustand/middleware"; // Zustand middleware for persisting state (e.g., to localStorage)
 import { useNavigate } from "react-router-dom"; // Hook for programmatic navigation
 import HelpPage from "./components/HelpPage";
+import TakeClass from "./TakeClass";
 
 // Lazily load the CalenderClassSelector component for better initial load performance
 
@@ -72,6 +73,7 @@ function MainSubstitutionPage() {
       visible: false, // Hide the selector
       filled: true, // Mark type as selected
     }));
+    setteachersubstitutionstosend({});
     // Enable the next step (class selection)
     setAllowSteps((prev) => ({
       ...prev,
@@ -156,7 +158,7 @@ function MainSubstitutionPage() {
         </div>
         <div className="h-[min(5vw,20px)]"></div>
 
-        {typeState?.type === 0 && (
+        {typeState?.type === 0 ? (
           <Suspense fallback={<div>Loading</div>}>
             <GiveClasses
               teacherSubstitutionsToSend={teacherSubstitutionsToSend}
@@ -164,6 +166,13 @@ function MainSubstitutionPage() {
               allowSteps={allowSteps}
             />
           </Suspense>
+        ) : typeState?.type === 1 ? (
+          <TakeClass
+            teacherSubstitutionsToSend={teacherSubstitutionsToSend}
+            setteachersubstitutionstosend={setteachersubstitutionstosend}
+          ></TakeClass>
+        ) : (
+          <div>Select an option</div>
         )}
 
         {/* Footer section with a gradient overlay and Send button */}

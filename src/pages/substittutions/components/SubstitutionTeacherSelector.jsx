@@ -38,7 +38,7 @@ export function SubstitutionTeacherSelector({
       },
     };
 
-    console.log(newTempSubstitutions);
+    // console.log(newTempSubstitutions);
   };
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export function SubstitutionTeacherSelector({
   }, [teacherID]);
 
   useEffect(() => {
-    console.log(teachers);
+    // console.log(teachers);
   }, [teachers]);
 
   return (
