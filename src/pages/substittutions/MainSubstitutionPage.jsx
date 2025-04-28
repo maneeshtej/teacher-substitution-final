@@ -19,6 +19,8 @@ import {
   testSupabaseEdge,
 } from "../../../utils/postUtils";
 import { checkDuplicateSubstitutions } from "../../../utils/duplicateUtils";
+import { GlobalLoadingIndicator } from "../../context/GlobalLoadingIndicator";
+import { useLoading } from "../../context/LoadingContext";
 
 // Lazily load the CalenderClassSelector component for better initial load performance
 
@@ -62,6 +64,7 @@ function MainSubstitutionPage() {
   );
 
   const [helpToggle, setHelpToggle] = useState(false);
+  const { setIsLoading, setMessage } = useLoading();
 
   // Hook for navigation
   const navigate = useNavigate();
@@ -138,13 +141,22 @@ function MainSubstitutionPage() {
       return;
     }
 
-    const processedSubstitutions = processSend(teacherSubstitutionsToSend);
+    const constantTeacherSubstitutions = teacherSubstitutionsToSend;
+
+    const processedSubstitutions = processSend(constantTeacherSubstitutions);
     setFinalSubstitutions(processedSubstitutions);
+
+    setMessage({
+      title: "Loading",
+      heading: "Checking duplicates",
+      body: "Please wait",
+    });
+    setIsLoading(true);
 
     const duplicatesResult = await checkDuplicateSubstitutions(
       processedSubstitutions
     );
-    console.log(duplicatesResult);
+    // console.log(duplicatesResult);
 
     const tempSubs = { ...teacherSubstitutionsToSend };
 
@@ -159,17 +171,51 @@ function MainSubstitutionPage() {
     });
 
     if (duplicatesResult.value === false) {
-      const { data, error } = await insertSubstitutions(finalSubstitutions);
+      setMessage({
+        title: "Loading",
+        heading: "Inserting substitutions",
+        body: "Please wait",
+        close: true,
+      });
+      const constantTeacherID = teacherID;
+      const { data, error } = await insertSubstitutions(
+        processedSubstitutions,
+        constantTeacherID
+      );
 
       if (error) {
         console.error(error);
+        setMessage({
+          title: "Error",
+          heading: null,
+          body: `Failed to insert due to `,
+          close: true,
+        });
+        setIsLoading(true);
+        return;
       }
 
       if (data) {
         setteachersubstitutionstosend({});
+        setFinalSubstitutions([]);
+        setMessage({
+          title: "Success",
+          heading: null,
+          body: "Inserted substitutions",
+          close: true,
+        });
+        setIsLoading(true);
         console.log("success", data);
+        return;
       }
     }
+    setMessage({
+      title: "Duplicates found",
+      heading: null,
+      body: "Please remove duplicates",
+      close: true,
+    });
+    setIsLoading(true);
   };
 
   const handleDraft = async () => {
@@ -195,8 +241,8 @@ function MainSubstitutionPage() {
 
   // Effect to synchronize local allowSteps with the Zustand store whenever local state changes
   useEffect(() => {
-    setallowsteps(allowSteps);
-  }, [allowSteps, setallowsteps]); // Added setallowsteps to dependency array
+    console.log("teacher subs to send : ", teacherSubstitutionsToSend);
+  }, [teacherSubstitutionsToSend]);
 
   useEffect(() => {
     console.log(finalSubstitutions);
@@ -205,6 +251,7 @@ function MainSubstitutionPage() {
   return (
     // Main container div covering the full screen
     <div className="fixed h-[100dvh] w-[100vw] bg-backgroundc text-textc">
+      <GlobalLoadingIndicator />
       {/* Render the TypeSelector component, passing visibility and update function */}
       <TypeSelector
         visible={typeState.visible}
@@ -283,6 +330,19 @@ function MainSubstitutionPage() {
           handleCheckSubstitutions={handleCheckSubstitutions}
           handleDraft={handleDraft}
         />
+        <h1
+          onClick={() => {
+            setMessage({
+              title: "Loading",
+              heading: "Inserting substitutions",
+              body: "Please wait",
+              close: true,
+            });
+            setIsLoading(true);
+          }}
+        >
+          Test Loading
+        </h1>
       </div>
     </div>
   );

@@ -40,7 +40,7 @@ function Home() {
       <div
         className={`fixed h-[100dvh] w-[100vw] z-50 bg-black/50 left-0 right-0 ${
           pageLoad ? "opacity-100 " : "opacity-0 pointer-events-none"
-        } transition-all duration-200 ease-in-out`}
+        } transition-all duration-200 ease-in-out `}
       >
         <div
           className={`h-[10dvh] bg-black border-b-[1px] border-[rgb(70,70,70)] flex items-center gap-[20px] pl-[min(3vw,50px)] ${

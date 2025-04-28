@@ -114,22 +114,98 @@ export const processSend = (teacherSubstitutionsToSend) => {
 //   return { data: insertedData, error: null };
 // };
 
-export const insertSubstitutions = async (subs) => {
-  if (!subs) {
-    return { data: null, error: "no Subs" };
+export const insertSubstitutions = async (subs, teacherID) => {
+  if (!subs || subs.length === 0) {
+    return { data: null, error: "No substitutions provided." };
   }
 
-  const { data, error } = await supabase.rpc("insert_values", {
-    substitutions: subs, // Pass the array directly
-  });
+  console.log("Data being passed: ", subs);
 
-  if (error) {
-    console.error("Insert Error:", error);
-    return { data: null, error };
+  // Add UUID to each substitution
+  const substitutionsWithUUID = subs.map((sub) => ({
+    ...sub,
+    uuid: uuidv4(), // Generate a unique UUID for each substitution
+  }));
+
+  // Helper function to insert the substitutions and check the status
+  const attemptInsert = async () => {
+    const { data, error } = await supabase.rpc("insert_values", {
+      substitutions: substitutionsWithUUID, // Pass the substitutions with UUIDs
+      main_teacher_id: teacherID,
+    });
+
+    if (error) {
+      console.error("Insert Error:", error);
+      return { success: false, error };
+    }
+
+    // Check if insert was successful (you can modify this based on your response format)
+    const insertedUUIDs = substitutionsWithUUID.map((sub) => sub.uuid);
+    const confirmInsert = await confirmInsertions(insertedUUIDs);
+
+    if (confirmInsert) {
+      return { success: true, data };
+    } else {
+      return { success: false, error: "Failed to confirm insertions" };
+    }
+  };
+
+  // Helper function to confirm the insertions (check with UUIDs)
+  const confirmInsertions = async (uuids) => {
+    try {
+      const { data, error } = await supabase
+        .from("Substitution")
+        .select("sub_id, uuid")
+        .in("uuid", uuids); // Check if substitutions exist based on the UUID
+
+      if (error) {
+        console.error("Error checking insertions:", error);
+        return false;
+      }
+
+      // Check if the returned data contains all the expected UUIDs
+      const insertedUUIDs = data.map((sub) => sub.uuid);
+      return uuids.every((uuid) => insertedUUIDs.includes(uuid));
+    } catch (err) {
+      console.error("Error during confirmation check:", err);
+      return false;
+    }
+  };
+
+  // Helper function for delay (in milliseconds)
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  // Retry Logic (3 times)
+  let attempt = 0;
+  while (attempt < 3) {
+    attempt++;
+
+    const result = await attemptInsert();
+    if (result.success) {
+      return { data: result.data, error: null };
+    } else if (attempt < 3) {
+      console.log(`Retrying... Attempt ${attempt}`);
+      await delay(1000);
+    }
   }
 
-  console.log("Insert successful:", data);
-  return { data: "success", error: null };
+  // After 3 retries, wait for 5 seconds and then retry again
+  await delay(5000); // Wait for 5 seconds
+
+  // Retry after delay
+  let retryAttempt = 0;
+  while (retryAttempt < 3) {
+    retryAttempt++;
+
+    const result = await attemptInsert();
+    if (result.success) {
+      return { data: result.data, error: null };
+    } else if (retryAttempt < 3) {
+      console.log(`Retrying... Attempt ${retryAttempt + 3} after delay`);
+    }
+  }
+
+  return { data: null, error: "Failed after 3 attempts" };
 };
 
 export const sendSubstitutions = async (substitutionData) => {

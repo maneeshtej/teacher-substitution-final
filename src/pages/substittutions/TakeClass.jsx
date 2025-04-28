@@ -54,6 +54,10 @@ function TakeClass({
   }, [teachers]);
 
   useEffect(() => {
+    console.log("teacher subs : ", teacherSubstitutionsToSend);
+  }, [teacherSubstitutionsToSend]);
+
+  useEffect(() => {
     // console.log(subTeacherID);
   }, [subTeacherID]);
 

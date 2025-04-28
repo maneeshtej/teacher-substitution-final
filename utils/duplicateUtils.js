@@ -10,6 +10,8 @@ export const checkDuplicateSubstitutions = async (substitutions) => {
     const { data, error } = await supabase
       .from("Substitution")
       .select("sub_id")
+      .eq("teacher_id", sub.teacher_id)
+      .eq("sub_teacher_id", sub.sub_teacher_id)
       .eq("class_id", sub.class_id)
       .eq("date_of_period", sub.date_of_period)
       .limit(1);

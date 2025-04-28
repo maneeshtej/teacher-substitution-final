@@ -210,7 +210,7 @@ function CalenderClassSelector({
   }, [teacherTimeTable, dates]);
 
   useEffect(() => {
-    // console.log(teacherSubstitutionsToSend);
+    console.log("teacher subs : ", teacherSubstitutionsToSend);
   }, [teacherSubstitutionsToSend]);
 
   useEffect(() => {

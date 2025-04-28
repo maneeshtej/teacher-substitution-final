@@ -2,6 +2,7 @@ import { StrictMode, Suspense, lazy } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { LoadingProvider } from "./context/LoadingContext.jsx";
 
 // Lazy load App.jsx
 const App = lazy(() => import("./App.jsx"));
@@ -21,10 +22,12 @@ const SplashScreen = () => (
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      {/* Suspense ensures App.jsx is loaded before rendering */}
-      <Suspense fallback={<SplashScreen />}>
-        <App />
-      </Suspense>
+      <LoadingProvider>
+        {/* Suspense ensures App.jsx is loaded before rendering */}
+        <Suspense fallback={<SplashScreen />}>
+          <App />
+        </Suspense>
+      </LoadingProvider>
     </QueryClientProvider>
   </StrictMode>
 );
