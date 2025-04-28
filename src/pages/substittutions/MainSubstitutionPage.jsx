@@ -1,3 +1,4 @@
+import { Footer } from "./../substitution/components/Footer";
 import { GiveClasses } from "./GiveClasses";
 import { SubstitutionsDisplay } from "./components/SubstitutionsDisplay";
 import { SubstitutionTeacherSelector } from "./components/SubstitutionTeacherSelector";
@@ -13,6 +14,7 @@ import TakeClass from "./TakeClass";
 import {
   insertSubstitutions,
   processSend,
+  sendDraftSubstituions,
   sendSubstitutions,
   testSupabaseEdge,
 } from "../../../utils/postUtils";
@@ -170,6 +172,22 @@ function MainSubstitutionPage() {
     }
   };
 
+  const handleDraft = async () => {
+    const processedSubstitutions = processSend(teacherSubstitutionsToSend);
+    setFinalSubstitutions(processedSubstitutions);
+
+    const { data, error } = await sendDraftSubstituions(finalSubstitutions);
+
+    if (error) {
+      console.error(error);
+    }
+
+    if (data) {
+      console.log("success");
+      setteachersubstitutionstosend({});
+    }
+  };
+
   // Effect to synchronize local typeState with the Zustand store whenever local state changes
   useEffect(() => {
     settypestate(typeState);
@@ -261,19 +279,10 @@ function MainSubstitutionPage() {
         )}
 
         {/* Footer section with a gradient overlay and Send button */}
-        <div className="h-[10dvh] w-[100%] flex justify-center items-center bg-gradient-to-b from-[rgba(30,30,30,0)] via-[rgba(30,30,30,0.4)] to-[rgba(30,30,30,1)]">
-          {/* Send button (functionality likely needs to be added to onClick) */}
-          <span
-            onClick={() => {
-              handleCheckSubstitutions();
-
-              // Call handleCheckSubstitutions where appropriate
-            }}
-            className="bg-textc flex items-center justify-center text-backgroundc font-bold tracking-wide p-[min(3vw,20px)] rounded-md cursor-pointer h-[80%] w-[min(60%,300px)]"
-          >
-            Send
-          </span>
-        </div>
+        <Footer
+          handleCheckSubstitutions={handleCheckSubstitutions}
+          handleDraft={handleDraft}
+        />
       </div>
     </div>
   );

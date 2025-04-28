@@ -191,10 +191,9 @@ export const sendDraftSubstituions = async (substitutions) => {
 
   try {
     const groupId = uuidv4();
-    const subsToSend = await processSubstitutions(substitutions, groupId);
     const { data: result, error } = await supabase
       .from("Drafts")
-      .insert(subsToSend);
+      .insert(substitutions);
 
     if (error) return logError("Supabase Insert Error:", error);
 
