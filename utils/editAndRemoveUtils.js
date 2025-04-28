@@ -76,12 +76,6 @@ export const updateSubstitutions = async (substitutions) => {
   const errors = results.filter(({ error }) => error);
   if (errors.length > 0) {
     console.error("Some updates failed:", errors);
-    await logSubstitutions(
-      "EDIT",
-      substitutions[0]?.teacher_id,
-      JSON.stringify(Object.values(substitutions)), // Convert object to an array
-      substitutions[0]?.group_id
-    );
 
     return { data: null, error: errors };
   }

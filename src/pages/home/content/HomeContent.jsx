@@ -290,7 +290,7 @@ function HomeContent({ type }) {
           {/* Rendering substitutions */}
           {/*  */}
           <div className="h-[4dvh]"></div>
-          <div className="h-[100%] w-[100%] flex flex-col gap-[10px] overflow-scroll">
+          <div className="h-[100%] w-[100%] flex flex-col gap-[10px]">
             {teacherSubstitutions ??
             Object.keys(teacherSubstitutions).length > 0 ? (
               Object.keys(teacherSubstitutions).map((key, index) => {

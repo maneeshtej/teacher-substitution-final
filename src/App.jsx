@@ -31,7 +31,10 @@ const SuccessfullSubstitution = lazy(() =>
 const Printable = lazy(() => import("./pages/print/Printable"));
 const SettingsPage = lazy(() => import("./pages/settings/SettingsPage"));
 const StarterPage = lazy(() => import("./pages/login/StarterPage"));
-const MainSubstitutionPage = lazy(() => import("./pages/substittutions/MainSubstitutionPage"))
+const MainSubstitutionPage = lazy(() =>
+  import("./pages/substittutions/MainSubstitutionPage")
+);
+const SearchPage = lazy(() => import("./pages/search/SearchPage"));
 
 function App() {
   const { isOnline } = useNetworkStore();
@@ -59,7 +62,7 @@ function App() {
         <div className="bg-backgroundc">
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<StarterPage/>} />
+              <Route path="/" element={<StarterPage />} />
               <Route path="/login" element={<Login />} />
               <Route
                 path="/home"
@@ -111,7 +114,14 @@ function App() {
                 path="/settings"
                 element={<ProtectedRoute element={<SettingsPage />} />}
               />
-              <Route path="/mainsub" element={<ProtectedRoute element={<MainSubstitutionPage />} />} />
+              <Route
+                path="/mainsub"
+                element={<ProtectedRoute element={<MainSubstitutionPage />} />}
+              />
+              <Route
+                path="/search"
+                element={<ProtectedRoute element={<SearchPage />} />}
+              ></Route>
             </Routes>
           </BrowserRouter>
         </div>

@@ -100,8 +100,13 @@ function Home() {
               </svg>
 
               {/* Desktop Search Bar */}
-              <div className="w-[100%] md:w-[70%] xl:w-[70vw] 2xl:w-[55vw] px-[20px] items-end hidden md:flex">
-                <div className="flex items-center bg-white h-[6vh] w-[100%] rounded-[5px] px-[10px] gap-[15px]">
+              <div
+                className="w-[100%] md:w-[70%] xl:w-[70vw] 2xl:w-[55vw] px-[20px] items-end hidden md:flex"
+                onClick={() => {
+                  navigate("/search");
+                }}
+              >
+                <div className="flex items-center bg-white h-[6vh] w-[100%] rounded-[5px] px-[10px] gap-[15px] cursor-pointer">
                   <SearchIconSvg />
                   <span className="text-textc font-medium">Search</span>
                 </div>
@@ -116,7 +121,12 @@ function Home() {
 
           {/* Mobile Search Bar (Only Visible on Small Screens) */}
           <div className="h-[4vh] md:hidden"></div>
-          <div className="w-[100%] px-[20px] flex items-end md:hidden">
+          <div
+            className="w-[100%] px-[20px] flex items-end md:hidden cursor-pointer"
+            onClick={() => {
+              navigate("/search");
+            }}
+          >
             <div className="flex items-center bg-white h-[6vh] w-[100%] rounded-[5px] px-[10px] gap-[15px]">
               <SearchIconSvg />
               <span className="text-textc font-medium">Search</span>
