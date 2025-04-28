@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../../utils/supabase";
+import { BackLogo } from "../../components/Logos";
 
 function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,12 +27,6 @@ function SearchPage() {
       setResults({ error: "Error fetching data" });
     }
   };
-
-  //   useEffect(() => {
-  //     if (results && results.length > 0) {
-  //       updateMatchedFields();
-  //     }
-  //   }, [results, searchTerm]);
 
   const updateMatchedFields = (data, searchTerm) => {
     if (!data || data.length === 0) return [];
@@ -64,6 +59,19 @@ function SearchPage() {
 
   return (
     <div className="fixed h-[100dvh] w-[100vw] bg-backgroundc">
+      <div className="h-[10dvh] w-full text-textc flex flex-row items-center gap-[10px] px-[min(3vw,50px)]">
+        <BackLogo size="min(3rem,50px)" />
+        <span className="text-heading font-bold">Search</span>
+      </div>
+      <div className="p-[min(3vw,50px)]">
+        <div className="bg-textc p-[min(2vw,30px)] rounded-md w-[clamp(300px,100%,700px)]">
+          <input
+            type="text"
+            className="bg-textc outline-none w-[100%]"
+            placeholder="Enter to search"
+          ></input>
+        </div>
+      </div>
       <input
         type="text"
         placeholder="Enter text"
