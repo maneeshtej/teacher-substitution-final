@@ -118,7 +118,7 @@ function HomeContent({ type }) {
   }, [teacherSubstitutions]);
 
   return (
-    <div className=" w-[100%] px-[min(3vw,50px)]">
+    <div className=" h-full w-[100%] px-[min(3vw,50px)] overflow-scroll">
       {!isLoading ? (
         <>
           <div
